@@ -4,7 +4,8 @@ moodle-filter_jwplayer
 This is Moodle filter that allows using JW Player for playing HTML5 and flash
 content. The filter is designed to achieve consistency of the player appearance
 in all major browsers and mobile platforms. The player supports flash fallback,
-making more devices and formats coverage than HTML5 or flash can't handle alone.
+providing more devices and formats coverage than either HTML5 or flash can
+handle alone.
 
 Installation
 ------------
@@ -58,7 +59,7 @@ formats see [this page](http://www.longtailvideo.com/support/jw-player/28836/med
 Note for developers
 -------------------
 
-The filer extends core_media_player class, which allows it to use the same neat
+The filter extends core_media_player class, which allows it to use the same neat
 approach to embed JW Player as used for other players in the core.
 
 The filter can easily be extended if required, so that you may use JW Player
