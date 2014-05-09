@@ -102,7 +102,10 @@ class filter_jwplayer_media extends core_media_player {
     }
 
     public function list_supported_extensions() {
-        return array('mp3', 'm4v', 'webm', 'ogv', 'mp4', 'flv', 'f4v', 'm3u8');
+        $video = array('mp4', 'm4v', 'f4v', 'mov', 'flv', 'webm', 'ogv');
+        $audio = array('aac', 'm4a', 'f4a', 'mp3', 'ogg', 'oga');
+        $streaming = array('m3u8');
+        return array_merge($video, $audio, $streaming);
     }
 
     public function get_rank() {
