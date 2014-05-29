@@ -27,6 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
+    require_once(__DIR__ . '/lib.php');
     require_once(__DIR__ . '/adminlib.php');
     $jwplayer = new filter_jwplayer_media();
 
