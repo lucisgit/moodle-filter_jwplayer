@@ -39,9 +39,9 @@ require_once($CFG->dirroot.'/filter/jwplayer/lib.php');
  */
 class filter_jwplayer extends moodle_text_filter {
     /** @var filter_jwplayer Media renderer */
-    private $renderer;
+    protected $renderer;
     /** @var string Partial regex pattern indicating possible embeddable content */
-    private $embedmarkers;
+    protected $embedmarkers;
 
     public function filter($text, array $options = array()) {
         global $CFG, $PAGE;
