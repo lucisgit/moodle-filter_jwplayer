@@ -50,9 +50,13 @@ class filter_jwplayer_media extends core_media_player {
         $sources = array();
         foreach ($urls as $url) {
             // Add the details for this source
-            $sources[] = array(
+            $source = array(
                 'file' => urldecode($url),
             );
+            if (strtolower(pathinfo($url, PATHINFO_EXTENSION)) === 'mov') {
+                $source['type'] = 'mp4';
+            }
+            $sources[] = $source;
         }
 
         if (count($sources) > 0) {
