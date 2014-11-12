@@ -94,6 +94,7 @@ class filter_jwplayer_media extends core_media_player {
                 'setupdata' => $playersetupdata,
             );
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
+            $PAGE->requires->js_init_call('M.filter_jwplayer.addButton', array('playerid' => $playerid), true, $jsmodule);
             $playerdiv = html_writer::tag('div', $this->get_name('', $urls), array('id' => $playerid));
             $output .= html_writer::tag('div', $playerdiv, array('class' => 'filter_jwplayer_media'));
         }
