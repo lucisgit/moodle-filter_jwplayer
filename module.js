@@ -13,7 +13,7 @@ M.filter_jwplayer.addButton = function(Y, playerid) {
 		//This portion designates the functionality of the button itself
 		function() {
 			//With the below code, we're grabbing the file that's currently playing
-			window.location.href = jwplayer().getPlaylistItem()['file'];
+			window.location.href = jwplayer().getPlaylistItem()['file'] + '?forcedownload=true';
 		},
 		//And finally, here we set the unique ID of the button itself.
 		"download"
