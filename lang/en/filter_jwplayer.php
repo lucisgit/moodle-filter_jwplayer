@@ -40,3 +40,4 @@ $string['securehosting'] = 'HTTPS for cloud-hosted player';
 $string['securehostingdesc'] = 'Use https for cloud-hosted player.';
 $string['downloadbutton'] = 'Download button';
 $string['downloadbuttondesc'] = 'Add a button in the upper left corner of the player for downloading the video file.';
+$string['videodownloadbtntttext'] = 'Download Video';

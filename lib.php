@@ -96,7 +96,7 @@ class filter_jwplayer_media extends core_media_player {
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
             if (get_config('filter_jwplayer', 'downloadbutton')) {
                 $img = $CFG->wwwroot.'/filter/jwplayer/img/download.png';
-                $tttext = 'Download Video';
+                $tttext = get_string('videodownloadbtntttext', 'filter_jwplayer');
                 $addButtonParams = array(
                     'playerid' => $playerid,
                     'img' => $img,
