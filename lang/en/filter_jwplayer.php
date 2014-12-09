@@ -38,3 +38,6 @@ $string['licensekey'] = 'Self-hosted player license key';
 $string['licensekeydesc'] = 'Self-hosted player license key from account settings page on <a href="https://account.jwplayer.com/#/account">JW player website</a>. Optional if free edition is used.';
 $string['securehosting'] = 'HTTPS for cloud-hosted player';
 $string['securehostingdesc'] = 'Use https for cloud-hosted player.';
+$string['downloadbutton'] = 'Download button';
+$string['downloadbuttondesc'] = 'Add a button in the upper left corner of the player for downloading the video file.';
+$string['videodownloadbtntttext'] = 'Download Video';

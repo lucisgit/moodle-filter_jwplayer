@@ -65,4 +65,10 @@ if ($ADMIN->fulltree) {
             get_string('enabledextensions', 'filter_jwplayer'),
             get_string('enabledextensionsdesc', 'filter_jwplayer'),
             $jwplayer->list_supported_extensions(), $enabledextensionsmenu));
+
+    // Download button
+    $settings->add(new admin_setting_configcheckbox('filter_jwplayer/downloadbutton',
+            get_string('downloadbutton', 'filter_jwplayer'),
+            get_string('downloadbuttondesc', 'filter_jwplayer'),
+            0));
 }
