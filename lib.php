@@ -43,7 +43,7 @@ if (!defined('FILTER_JWPLAYER_AUDIO_HEIGTH')) {
  */
 class filter_jwplayer_media extends core_media_player {
     public function embed($urls, $name, $width, $height, $options) {
-        global $PAGE;
+        global $PAGE, $CFG;
         // We do embedding only here. JW player setup is done in the filter.
         $output = '';
 
@@ -93,8 +93,15 @@ class filter_jwplayer_media extends core_media_player {
                 'playerid' => $playerid,
                 'setupdata' => $playersetupdata,
             );
+            $img = $CFG->wwwroot.'/filter/jwplayer/img/download.png';
+            $tttext = 'Download Video';
+            $addButtonParams = array(
+                'playerid' => $playerid,
+                'img' => $img,
+                'tttext' => $tttext,
+            );
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
-            $PAGE->requires->js_init_call('M.filter_jwplayer.addButton', array('playerid' => $playerid), true, $jsmodule);
+            $PAGE->requires->js_init_call('M.filter_jwplayer.addButton', $addButtonParams, true, $jsmodule);
             $playerdiv = html_writer::tag('div', $this->get_name('', $urls), array('id' => $playerid));
             $output .= html_writer::tag('div', $playerdiv, array('class' => 'filter_jwplayer_media'));
         }
