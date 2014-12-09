@@ -93,15 +93,17 @@ class filter_jwplayer_media extends core_media_player {
                 'playerid' => $playerid,
                 'setupdata' => $playersetupdata,
             );
-            $img = $CFG->wwwroot.'/filter/jwplayer/img/download.png';
-            $tttext = 'Download Video';
-            $addButtonParams = array(
-                'playerid' => $playerid,
-                'img' => $img,
-                'tttext' => $tttext,
-            );
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
-            $PAGE->requires->js_init_call('M.filter_jwplayer.addButton', $addButtonParams, true, $jsmodule);
+            if (get_config('filter_jwplayer', 'downloadbutton')) {
+                $img = $CFG->wwwroot.'/filter/jwplayer/img/download.png';
+                $tttext = 'Download Video';
+                $addButtonParams = array(
+                    'playerid' => $playerid,
+                    'img' => $img,
+                    'tttext' => $tttext,
+                );
+                $PAGE->requires->js_init_call('M.filter_jwplayer.addButton', $addButtonParams, true, $jsmodule);
+            }
             $playerdiv = html_writer::tag('div', $this->get_name('', $urls), array('id' => $playerid));
             $output .= html_writer::tag('div', $playerdiv, array('class' => 'filter_jwplayer_media'));
         }
