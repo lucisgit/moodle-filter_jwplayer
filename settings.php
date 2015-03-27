@@ -60,11 +60,12 @@ if ($ADMIN->fulltree) {
             ''));
 
     // Enabled extensions.
-    $enabledextensionsmenu = array_combine($jwplayer->list_supported_extensions(), $jwplayer->list_supported_extensions());
+    $supportedextensions = $jwplayer->list_supported_extensions();
+    $enabledextensionsmenu = array_combine($supportedextensions, $supportedextensions);
     $settings->add(new admin_setting_configmultiselect('filter_jwplayer/enabledextensions',
             get_string('enabledextensions', 'filter_jwplayer'),
             get_string('enabledextensionsdesc', 'filter_jwplayer'),
-            $jwplayer->list_supported_extensions(), $enabledextensionsmenu));
+            $supportedextensions, $enabledextensionsmenu));
 
     // Download button
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/downloadbutton',
