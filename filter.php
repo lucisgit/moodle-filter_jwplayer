@@ -43,16 +43,23 @@ class filter_jwplayer extends moodle_text_filter {
     /** @var string Partial regex pattern indicating possible embeddable content */
     protected $embedmarkers;
 
+    /**
+     * Implement the filtering.
+     *
+     * @param $text some HTML content.
+     * @param array $options options passed to the filters
+     * @return the HTML content after the filtering has been applied.
+     */
     public function filter($text, array $options = array()) {
         global $CFG, $PAGE;
 
         if (!is_string($text) or empty($text)) {
-            // non string data can not be filtered anyway
+            // Non string data can not be filtered anyway.
             return $text;
         }
         if (stripos($text, '</a>') === false) {
-            // performance shortcut - all regexes bellow end with the </a> tag,
-            // if not present nothing can match
+            // Performance shortcut - all regexes bellow end with the </a> tag,
+            // if not present nothing can match.
             return $text;
         }
 
@@ -69,7 +76,7 @@ class filter_jwplayer extends moodle_text_filter {
                 array($this, 'callback'), $text);
 
         if (empty($newtext) or $newtext === $text) {
-            // error or not filtered
+            // Error or not filtered.
             return $text;
         }
 
@@ -109,6 +116,12 @@ class filter_jwplayer extends moodle_text_filter {
         }
     }
 
+    /**
+     * Setup filter requirements.
+     *
+     * @param moodle_page $page the page we are going to add requirements to.
+     * @param context $context the context which contents are going to be filtered.
+     */
     public function setup($page, $context) {
         $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
 
@@ -119,7 +132,7 @@ class filter_jwplayer extends moodle_text_filter {
                 $jwplayer = new moodle_url( $proto . '://jwpsrv.com/library/' . $accounttoken . '.js');
                 $page->requires->js($jwplayer, false);
             }
-        } elseif ($hostingmethod === 'self') {
+        } else if ($hostingmethod === 'self') {
             $jwplayer = new moodle_url('/lib/jwplayer/jwplayer.js');
             $page->requires->js($jwplayer, false);
 

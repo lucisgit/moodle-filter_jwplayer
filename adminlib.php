@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -93,7 +92,7 @@ class filter_jwplayer_accounttoken_setting extends admin_setting_configtext {
     public function validate($data) {
         $result = parent::validate($data);
         if ($result !== true) {
-           return $result;
+            return $result;
         }
 
         $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -67,7 +66,7 @@ if ($ADMIN->fulltree) {
             get_string('enabledextensionsdesc', 'filter_jwplayer'),
             $supportedextensions, $enabledextensionsmenu));
 
-    // Download button
+    // Download button.
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/downloadbutton',
             get_string('downloadbutton', 'filter_jwplayer'),
             get_string('downloadbuttondesc', 'filter_jwplayer'),
