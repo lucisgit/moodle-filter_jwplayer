@@ -148,7 +148,7 @@ class filter_jwplayer_media extends core_media_player {
     public function list_supported_extensions() {
         $video = array('mp4', 'm4v', 'f4v', 'mov', 'flv', 'webm', 'ogv');
         $audio = array('aac', 'm4a', 'f4a', 'mp3', 'ogg', 'oga');
-        $streaming = array('m3u8');
+        $streaming = array('m3u8', 'smil');
         return array_merge($video, $audio, $streaming);
     }
 
