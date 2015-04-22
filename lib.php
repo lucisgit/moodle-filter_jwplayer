@@ -43,6 +43,62 @@ if (!defined('FILTER_JWPLAYER_AUDIO_HEIGTH')) {
 }
 
 /**
+ * Effectively, this is a copy of core_media::split_alternatives that does
+ * not get confused with rtmp:// scheme.
+ *
+ * Given a string containing multiple URLs separated by #, this will split
+ * it into an array of moodle_url objects suitable for using when calling
+ * embed_alternatives.
+ *
+ * Note that the input string should NOT be html-escaped (i.e. if it comes
+ * from html, call html_entity_decode first).
+ *
+ * @param string $combinedurl String of 1 or more alternatives separated by #
+ * @param int $width Output variable: width (will be set to 0 if not specified)
+ * @param int $height Output variable: height (0 if not specified)
+ * @return array Array of 1 or more moodle_url objects
+ */
+function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
+    $urls = explode('#', $combinedurl);
+    $width = 0;
+    $height = 0;
+    $returnurls = array();
+
+    foreach ($urls as $url) {
+        $matches = null;
+
+        // You can specify the size as a separate part of the array like
+        // #d=640x480 without actually including a url in it.
+        if (preg_match('/^d=([\d]{1,4})x([\d]{1,4})$/i', $url, $matches)) {
+            $width  = $matches[1];
+            $height = $matches[2];
+            continue;
+        }
+
+        // Can also include the ?d= as part of one of the URLs (if you use
+        // more than one they will be ignored except the last).
+        if (preg_match('/\?d=([\d]{1,4})x([\d]{1,4})$/i', $url, $matches)) {
+            $width  = $matches[1];
+            $height = $matches[2];
+
+            // Trim from URL.
+            $url = str_replace($matches[0], '', $url);
+        }
+
+        // Clean up url.
+        $url = filter_var($url, FILTER_VALIDATE_URL);
+        if (empty($url)) {
+            continue;
+        }
+
+        // Turn it into moodle_url object.
+        $returnurls[] = new moodle_url($url);
+    }
+
+    return $returnurls;
+}
+
+/**
  *  JW Player media filtering library.
  *
  * @package    filter
@@ -55,7 +111,7 @@ class filter_jwplayer_media extends core_media_player {
     /**
      * Generates code required to embed the player.
      *
-     * @param array $urls URLs of media files
+     * @param array $urls Moodle URLs of media files
      * @param string $name Display name; '' to use default
      * @param int $width Optional width; 0 to use default
      * @param int $height Optional height; 0 to use default
@@ -68,26 +124,33 @@ class filter_jwplayer_media extends core_media_player {
         $output = '';
 
         $sources = array();
+        $playersetupdata = array();
+
         foreach ($urls as $url) {
             // Add the details for this source.
             $source = array(
                 'file' => urldecode($url),
             );
+            // Help to determine the type of mov.
             if (strtolower(pathinfo($url, PATHINFO_EXTENSION)) === 'mov') {
                 $source['type'] = 'mp4';
             }
-            $sources[] = $source;
+
+            if ($url->get_scheme() === 'rtmp') {
+                // For RTMP we set rendering mode to Flash and making sure
+                // URL is the first in the list.
+                $playersetupdata['primary'] = 'flash';
+                array_unshift($sources, $source);
+            } else {
+                $sources[] = $source;
+            }
         }
 
         if (count($sources) > 0) {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
-            $playersetupdata = array(
-                'title' => $this->get_name('', $urls),
-                'playlist' => array(
-                    array('sources' => $sources),
-                ),
-            );
+            $playersetupdata['title'] = $this->get_name('', $urls);
+            $playersetupdata['playlist'] = array(array('sources' => $sources));
             // If width is not provided, use default.
             if (!$width) {
                 $width = FILTER_JWPLAYER_VIDEO_WIDTH;
@@ -141,6 +204,21 @@ class filter_jwplayer_media extends core_media_player {
     }
 
     /**
+     * Lists keywords that must be included in a url that can be embedded with
+     * this media player.
+     *
+     * @return array Array of keywords to add to the embeddable markers list
+     */
+    public function get_embeddable_markers() {
+        $markers = parent::get_embeddable_markers();
+        // Add RTMP support if enabled.
+        if (get_config('filter_jwplayer', 'supportrtmp')) {
+            $markers[] = 'rtmp://';
+        }
+        return $markers;
+    }
+
+    /**
      * Generates the list of file extensions supported by this media player.
      *
      * @return array Array of strings (extension not including dot e.g. 'mp3')
@@ -150,6 +228,34 @@ class filter_jwplayer_media extends core_media_player {
         $audio = array('aac', 'm4a', 'f4a', 'mp3', 'ogg', 'oga');
         $streaming = array('m3u8', 'smil');
         return array_merge($video, $audio, $streaming);
+    }
+
+    /**
+     * Given a list of URLs, returns a reduced array containing only those URLs
+     * which are supported by this player. (Empty if none.)
+     * @param array $urls Array of moodle_url
+     * @param array $options Options (same as will be passed to embed)
+     * @return array Array of supported moodle_url
+     */
+    public function list_supported_urls(array $urls, array $options = array()) {
+        $extensions = $this->get_supported_extensions();
+        $result = array();
+        foreach ($urls as $url) {
+            // If RTMP support is disabled, skip the URL.
+            if (!get_config('filter_jwplayer', 'supportrtmp') && ($url->get_scheme() === 'rtmp')) {
+                continue;
+            }
+            // If RTMP support is enabled, URL is supported.
+            if (get_config('filter_jwplayer', 'supportrtmp') && ($url->get_scheme() === 'rtmp')) {
+                $result[] = $url;
+                continue;
+            }
+            if (in_array(core_media::get_extension($url), $extensions)) {
+                // URL is matching one of enabled extensions.
+                $result[] = $url;
+            }
+        }
+        return $result;
     }
 
     /**

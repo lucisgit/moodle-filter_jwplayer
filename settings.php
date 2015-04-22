@@ -66,6 +66,12 @@ if ($ADMIN->fulltree) {
             get_string('enabledextensionsdesc', 'filter_jwplayer'),
             $supportedextensions, $enabledextensionsmenu));
 
+    // RTMP support.
+    $settings->add(new admin_setting_configcheckbox('filter_jwplayer/supportrtmp',
+            get_string('supportrtmp', 'filter_jwplayer'),
+            get_string('supportrtmpdesc', 'filter_jwplayer'),
+            0));
+
     // Download button.
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/downloadbutton',
             get_string('downloadbutton', 'filter_jwplayer'),

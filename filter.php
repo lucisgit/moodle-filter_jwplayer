@@ -90,8 +90,6 @@ class filter_jwplayer extends moodle_text_filter {
      * @return string
      */
     private function callback(array $matches) {
-        global $CFG, $PAGE;
-
         // Check if we ignore it.
         if (preg_match('/class="[^"]*nomediaplugin/i', $matches[0])) {
             return $matches[0];
@@ -104,8 +102,7 @@ class filter_jwplayer extends moodle_text_filter {
         }
 
         // Split provided URL into alternatives.
-        $urls = core_media::split_alternatives($matches[1], $width, $height);
-
+        $urls = filter_jwplayer_split_alternatives($matches[1], $width, $height);
         $result = $this->renderer->embed_alternatives($urls, $name, $width, $height);
 
         // If something was embedded, return it, otherwise return original.
