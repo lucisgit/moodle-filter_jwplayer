@@ -38,8 +38,12 @@ $string['hostingmethoddesc'] = 'Cloud hosted JW player is used by default. If yo
 $string['hostingmethodself'] = 'Self-hosted';
 $string['licensekey'] = 'Self-hosted player license key';
 $string['licensekeydesc'] = 'Self-hosted player license key from account settings page on <a href="https://account.jwplayer.com/#/account">JW player website</a>. Optional if free edition is used.';
+$string['paideditionsconfig'] = 'Settings for paid editions of JW Player';
+$string['paideditionsconfigdescr'] = 'Settings below only work with Pro, Premium and Ads editions. They have no effect for free edition.';
 $string['securehosting'] = 'HTTPS for cloud-hosted player';
 $string['securehostingdesc'] = 'Use https for cloud-hosted player.';
+$string['standardskin'] = 'standard';
 $string['supportrtmp'] = 'Support RTMP streams';
 $string['supportrtmpdesc'] = 'If enabled, links that start with rtmp:// will be handled by filter, irrespective of whether its extension is enabled in the supported extensions setting.';
+$string['useplayerskin'] = 'Use player skin';
 $string['videodownloadbtntttext'] = 'Download Video';

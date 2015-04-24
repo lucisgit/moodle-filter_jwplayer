@@ -167,6 +167,11 @@ class filter_jwplayer_media extends core_media_player {
                 $playersetupdata['height'] = FILTER_JWPLAYER_AUDIO_HEIGTH;
             }
 
+            // Load skin.
+            if ($skin = get_config('filter_jwplayer', 'skin')) {
+                $playersetupdata['skin'] = $skin;
+            }
+
             // Set up the player.
             $jsmodule = array(
                 'name' => $playerid,
