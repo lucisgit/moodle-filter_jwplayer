@@ -5,7 +5,7 @@ This is Moodle filter that allows using JW Player for playing HTML5 and flash
 content. The filter is designed to achieve consistency of the player appearance
 in all major browsers and mobile platforms. The player supports flash fallback,
 providing more devices and formats coverage than either HTML5 or flash can
-handle alone.
+handle alone. The filter also supports RTMP and HLS streams.
 
 Installation
 ------------
@@ -51,9 +51,11 @@ filter on Manage Filters  page in Site Administration area and move it above
 Usage
 -----
 
-Any multimedia content added to moodle will be played using JW Player if the
-format is supported and enabled in the config. For more details on supported
-formats see [this page](http://www.longtailvideo.com/support/jw-player/28836/media-format-support)
+Any multimedia content added to moodle using the HTML editor, either using
+the link or via media embedding dialog, will be played using JW Player if
+the format is supported and enabled in the config. For more details on
+supported formats see [this
+page](http://www.longtailvideo.com/support/jw-player/28836/media-format-support)
 (ignore YouTube section) on JW Player website.
 
 Note for developers
@@ -78,6 +80,7 @@ class filter_luflashmedia extends filter_jwplayer {
      */
     private function callback(array $matches) {
         $result = '';
+        $mediaserver = 'rtmp://your.server.com';
 
         // Check if we ignore it.
         if (preg_match('/class="[^"]*nomediaplugin/i', $matches[0])) {
@@ -91,11 +94,10 @@ class filter_luflashmedia extends filter_jwplayer {
         }
 
         // Split provided URL into alternatives.
-        if (strpos($matches[1], 'rtmp://your.server.com' !== false) {
+        if (strpos($matches[1], $mediaserver !== false) {
             // Special treatment for RTMP.
             $urls = core_media::split_alternatives($matches[1], $width, $height);
-            $options['playersetupdata'] = array('primary' => 'flash');
-            $result = $this->renderer->embed_alternatives($urls, $name, $width, $height, $options);
+            $result = $this->renderer->embed_alternatives($urls, $name, $width, $height);
         }
 
         // If something was embedded, return it, otherwise return original.
