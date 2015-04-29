@@ -172,26 +172,26 @@ class filter_jwplayer_media extends core_media_player {
                 $playersetupdata['skin'] = $skin;
             }
 
+            $downloadbtn = null;
+            if (get_config('filter_jwplayer', 'downloadbutton')) {
+                $downloadbtn = array(
+                    'img' => $CFG->wwwroot.'/filter/jwplayer/img/download.png',
+                    'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer')
+                );
+            }
+
+            $playersetup = array(
+                'playerid' => $playerid,
+                'setupdata' => $playersetupdata,
+                'downloadbtn' => $downloadbtn,
+            );
+
             // Set up the player.
             $jsmodule = array(
                 'name' => $playerid,
                 'fullpath' => '/filter/jwplayer/module.js',
             );
-            $playersetup = array(
-                'playerid' => $playerid,
-                'setupdata' => $playersetupdata,
-            );
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
-            if (get_config('filter_jwplayer', 'downloadbutton')) {
-                $img = $CFG->wwwroot.'/filter/jwplayer/img/download.png';
-                $tttext = get_string('videodownloadbtntttext', 'filter_jwplayer');
-                $addbuttonparams = array(
-                    'playerid' => $playerid,
-                    'img' => $img,
-                    'tttext' => $tttext,
-                );
-                $PAGE->requires->js_init_call('M.filter_jwplayer.add_button', $addbuttonparams, true, $jsmodule);
-            }
             $playerdiv = html_writer::tag('div', $this->get_name('', $urls), array('id' => $playerid));
             $output .= html_writer::tag('div', $playerdiv, array('class' => 'filter_jwplayer_media'));
         }
