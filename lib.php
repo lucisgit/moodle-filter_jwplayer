@@ -116,6 +116,10 @@ class filter_jwplayer_media extends core_media_player {
      * @param int $width Optional width; 0 to use default
      * @param int $height Optional height; 0 to use default
      * @param array $options Options array
+     *                       subtitles
+     *                           use 'subtitles' key with an array of subtitle track files
+     *                           in vtt or srt format indexed by label name.
+     *                           Example: $options['subtitles']['English'] = http://example.com/english.vtt
      * @return string HTML code for embed
      */
     public function embed($urls, $name, $width, $height, $options) {
@@ -150,7 +154,22 @@ class filter_jwplayer_media extends core_media_player {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
             $playersetupdata['title'] = $this->get_name('', $urls);
-            $playersetupdata['playlist'] = array(array('sources' => $sources));
+
+            $playlistitem = array('sources' => $sources);
+
+            // setup subtitle tracks
+            if (isset($options['subtitles'])) {
+                $tracks = array();
+                foreach ($options['subtitles'] as $label => $subtitlefileurl) {
+                    $tracks[] = array(
+                        'file' => $subtitlefileurl->out(),
+                        'label' => $label);
+                }
+                $playlistitem['tracks'] = $tracks;
+            }
+
+            $playersetupdata['playlist'] = array($playlistitem);
+
             // If width is not provided, use default.
             if (!$width) {
                 $width = FILTER_JWPLAYER_VIDEO_WIDTH;
