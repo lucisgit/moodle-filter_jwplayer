@@ -191,6 +191,9 @@ class filter_jwplayer_media extends core_media_player {
                 'name' => $playerid,
                 'fullpath' => '/filter/jwplayer/module.js',
             );
+
+            $this->setup();
+
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
             $playerdiv = html_writer::tag('div', $this->get_name('', $urls), array('id' => $playerid));
             $output .= html_writer::tag('div', $playerdiv, array('class' => 'filter_jwplayer_media'));
@@ -291,5 +294,29 @@ class filter_jwplayer_media extends core_media_player {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Loads and setup the jwplayer library.
+     */
+    private function setup() {
+        global $PAGE;
+        
+        $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
+        if ($hostingmethod === 'cloud') {
+            $proto = (get_config('filter_jwplayer', 'securehosting')) ? 'https' : 'http';
+            // For cloud-hosted player account token is required.
+            if ($accounttoken = get_config('filter_jwplayer', 'accounttoken')) {
+                $jwplayer = new moodle_url( $proto . '://jwpsrv.com/library/' . $accounttoken . '.js');
+                $PAGE->requires->js($jwplayer, false);
+            }
+        } else if ($hostingmethod === 'self') {
+            $jwplayer = new moodle_url('/lib/jwplayer/jwplayer.js');
+            $PAGE->requires->js($jwplayer, false);
+
+            if ($licensekey = get_config('filter_jwplayer', 'licensekey')) {
+                $PAGE->requires->js_init_code("jwplayer.key='" . $licensekey . "'");
+            }
+        }
     }
 }

@@ -24,6 +24,8 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot.'/filter/jwplayer/lib.php');
+
 class filter_jwplayer_renderer extends core_media_renderer {
     protected function get_players_raw() {
         return array(
