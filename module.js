@@ -1,12 +1,29 @@
 M.filter_jwplayer = {};
 
-M.filter_jwplayer.init = function(Y, playerid, setupdata, downloadbtn) {
+M.filter_jwplayer.init = function(Y, playerid, setupdata, buttons) {
     jwplayer(playerid).setup(setupdata);
 
-    if (downloadbtn != undefined) {
-        jwplayer(playerid).addButton(downloadbtn.img, downloadbtn.tttext, function() {
-                // Grab the file that's currently playing.
-                window.location.href = jwplayer(playerid).getPlaylistItem().file + '?forcedownload=true';
-            }, "download");
+    var executenamespacedFunction = function(namespacedFunctionName, args) {
+        var namespaces = namespacedFunctionName.split(".");
+        var fn = namespaces.pop();
+        var context = window;
+        for (var i = 0; i < namespaces.length; i++) {
+            context = context[namespaces[i]];
+        }
+        context[fn].apply(context, args);
+    };
+
+    function btncallback(i) {
+        return function() {
+            executenamespacedFunction(buttons[i].callback, [playerid]);
+        };
     }
+
+    for (var i = 0; i < buttons.length; i++) {
+        jwplayer(playerid).addButton(buttons[i].img, buttons[i].text, btncallback(i), buttons[i].id);
+    }
+};
+
+M.filter_jwplayer.download = function(playerid) {
+    window.location.href = jwplayer(playerid).getPlaylistItem().file + '?forcedownload=true';
 };

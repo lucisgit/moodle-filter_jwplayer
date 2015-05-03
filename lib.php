@@ -116,6 +116,18 @@ class filter_jwplayer_media extends core_media_player {
      * @param int $width Optional width; 0 to use default
      * @param int $height Optional height; 0 to use default
      * @param array $options Options array
+     *                       buttons
+     *                           use 'buttons' key with an array of arrays with id, img, text, callback indexes
+     *                           id: unique id across all buttons assigned to this player
+     *                           img: an icon used for the button
+     *                           text: a label displayed while mouse over the button
+     *                           callback: a JavaScript function name used as callback, playerid provided as first parameter
+     *                           Example: $options['buttons'] = array(array(
+     *                               'id'=>'uniqueid',
+     *                               'img'=>http://path/to/img.png,
+     *                               'text'=>'label',
+     *                               'callback'=>'M.plugin.callback'))
+     *                           for more details see http://support.jwplayer.com/customer/portal/articles/1413089-javascript-api-reference#controls
      * @return string HTML code for embed
      */
     public function embed($urls, $name, $width, $height, $options) {
@@ -172,18 +184,26 @@ class filter_jwplayer_media extends core_media_player {
                 $playersetupdata['skin'] = $skin;
             }
 
-            $downloadbtn = null;
+            $buttons = array();
+
             if (get_config('filter_jwplayer', 'downloadbutton')) {
                 $downloadbtn = array(
                     'img' => $CFG->wwwroot.'/filter/jwplayer/img/download.png',
-                    'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer')
+                    'text' => get_string('videodownloadbtntttext', 'filter_jwplayer'),
+                    'callback' => 'M.filter_jwplayer.download',
+                    'id' => 'download'
                 );
+                $buttons[] = $downloadbtn;
+            }
+
+            if (isset($options['buttons']) && is_array($options['buttons'])) {
+                $buttons = array_merge($buttons, $options['buttons']);
             }
 
             $playersetup = array(
                 'playerid' => $playerid,
                 'setupdata' => $playersetupdata,
-                'downloadbtn' => $downloadbtn,
+                'buttons' => $buttons,
             );
 
             // Set up the player.
