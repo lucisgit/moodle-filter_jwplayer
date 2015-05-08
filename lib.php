@@ -161,9 +161,15 @@ class filter_jwplayer_media extends core_media_player {
             if (isset($options['subtitles'])) {
                 $tracks = array();
                 foreach ($options['subtitles'] as $label => $subtitlefileurl) {
-                    $tracks[] = array(
-                        'file' => $subtitlefileurl->out(),
-                        'label' => $label);
+                    if ($label == 'chapters' || $label == 'thumbnails') {
+                        $tracks[] = array(
+                            'file' => $subtitlefileurl->out(),
+                            'kind' => $label);
+                    } else {
+                        $tracks[] = array(
+                            'file' => $subtitlefileurl->out(),
+                            'label' => $label);
+                    }
                 }
                 $playlistitem['tracks'] = $tracks;
             }
