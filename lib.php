@@ -119,7 +119,14 @@ class filter_jwplayer_media extends core_media_player {
      *                       subtitles
      *                           use 'subtitles' key with an array of subtitle track files
      *                           in vtt or srt format indexed by label name.
-     *                           Example: $options['subtitles']['English'] = http://example.com/english.vtt
+     *                           use 'chapters' or 'thumbnail' index for adding chapters/thumbnails
+     *                           to the video. see:
+     *                               * http://support.jwplayer.com/customer/portal/articles/1407438-adding-closed-captions
+     *                               * http://support.jwplayer.com/customer/portal/articles/1407454-adding-chapter-markers
+     *                               * http://support.jwplayer.com/customer/portal/articles/1407439-adding-preview-thumbnails
+     *                           Examples:
+     *                               $options['subtitles']['English'] = http://example.com/english.vtt
+     *                               $options['subtitles']['chapters'] = http://example.com/chapters.vtt
      * @return string HTML code for embed
      */
     public function embed($urls, $name, $width, $height, $options) {
