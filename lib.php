@@ -116,6 +116,8 @@ class filter_jwplayer_media extends core_media_player {
      * @param int $width Optional width; 0 to use default
      * @param int $height Optional height; 0 to use default
      * @param array $options Options array
+     *                       playerid
+     *                           unique custom id for the player div
      *                       subtitles
      *                           use 'subtitles' key with an array of subtitle track files
      *                           in vtt or srt format indexed by label name.
@@ -151,7 +153,11 @@ class filter_jwplayer_media extends core_media_player {
         }
 
         if (count($sources) > 0) {
-            $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
+            if (isset($options['playerid'])) {
+                $playerid = $options['playerid'];
+            } else {
+                $playerid = 'local_jwplayer_media_player_' . html_writer::random_id();
+            }
 
             $playersetupdata['title'] = $this->get_name('', $urls);
 
