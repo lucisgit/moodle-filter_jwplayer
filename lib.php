@@ -116,6 +116,9 @@ class filter_jwplayer_media extends core_media_player {
      * @param int $width Optional width; 0 to use default
      * @param int $height Optional height; 0 to use default
      * @param array $options Options array
+     *                       poster
+     *                           use 'image' key with a moodle_url to an image as poster image
+     *                           displayed before playback starts.
      *                       subtitles
      *                           use 'subtitles' key with an array of subtitle track files
      *                           in vtt or srt format indexed by label name.
@@ -156,6 +159,11 @@ class filter_jwplayer_media extends core_media_player {
             $playersetupdata['title'] = $this->get_name('', $urls);
 
             $playlistitem = array('sources' => $sources);
+
+            // setup poster image
+            if (isset($options['image'])) {
+                $playlistitem['image'] = $options['image']->out();
+            }
 
             // setup subtitle tracks
             if (isset($options['subtitles'])) {
