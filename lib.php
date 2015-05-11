@@ -117,7 +117,7 @@ class filter_jwplayer_media extends core_media_player {
      * @param int $height Optional height; 0 to use default
      * @param array $options Options array
      *                       subtitles
-     *                           use 'subtitles' key with an array of subtitle track files
+     *                           use 'subtitles' key with an array of moodle_url to subtitle track files
      *                           in vtt or srt format indexed by label name.
      *                           use 'chapters' or 'thumbnail' index for adding chapters/thumbnails
      *                           to the video. see:
@@ -125,8 +125,8 @@ class filter_jwplayer_media extends core_media_player {
      *                               * http://support.jwplayer.com/customer/portal/articles/1407454-adding-chapter-markers
      *                               * http://support.jwplayer.com/customer/portal/articles/1407439-adding-preview-thumbnails
      *                           Examples:
-     *                               $options['subtitles']['English'] = http://example.com/english.vtt
-     *                               $options['subtitles']['chapters'] = http://example.com/chapters.vtt
+     *                               $options['subtitles']['English'] = new moodle_url('english.vtt')
+     *                               $options['subtitles']['chapters'] = new moodle_url('chapters.vtt')
      * @return string HTML code for embed
      */
     public function embed($urls, $name, $width, $height, $options) {
