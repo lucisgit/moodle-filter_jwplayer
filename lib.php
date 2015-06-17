@@ -156,7 +156,7 @@ class filter_jwplayer_media extends core_media_player {
             if (isset($options['playerid'])) {
                 $playerid = $options['playerid'];
             } else {
-                $playerid = 'local_jwplayer_media_player_' . html_writer::random_id();
+                $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
             }
 
             $playersetupdata['title'] = $this->get_name('', $urls);
