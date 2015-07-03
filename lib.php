@@ -207,6 +207,12 @@ class filter_jwplayer_media extends core_media_player {
                 );
             }
 
+            if (get_config('filter_jwplayer', 'googleanalytics')) {
+                $playersetupdata['ga'] = array(
+                    'trackingobject' => get_config('filter_jwplayer', 'gatrackingobject')
+                );
+            }			
+
             $playersetup = array(
                 'playerid' => $playerid,
                 'setupdata' => $playersetupdata,

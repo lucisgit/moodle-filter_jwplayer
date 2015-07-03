@@ -88,5 +88,16 @@ if ($ADMIN->fulltree) {
     $skinoptions = array_merge($skinoptions, array_combine($skins, $skins));
     $settings->add(new admin_setting_configselect('filter_jwplayer/skin',
             get_string('useplayerskin', 'filter_jwplayer'), '', '', $skinoptions));
-}
 
+
+    // Google Analytics support.
+    $settings->add(new admin_setting_configcheckbox('filter_jwplayer/googleanalytics',
+            get_string('googleanalytics', 'filter_jwplayer'),
+            get_string('googleanalyticsdesc', 'filter_jwplayer'),
+            0));
+			
+    $settings->add(new admin_setting_configtext('filter_jwplayer/gatrackingobject',
+            get_string('gatrackingobject', 'filter_jwplayer'),
+            get_string('gatrackingobjectdesc', 'filter_jwplayer'),
+            '_gaq'));
+}
