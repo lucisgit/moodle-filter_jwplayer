@@ -78,6 +78,9 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
     $width = 0;
     $height = 0;
     $returnurls = array();
+    $returnoptions = array();
+    $posterextensions = array('jpeg', 'jpg', 'gif', 'png');
+    $subtitleextensions = array('vtt');
 
     foreach ($urls as $url) {
         $matches = null;
@@ -112,10 +115,28 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
         }
 
         // Turn it into moodle_url object.
-        $returnurls[] = new moodle_url($url);
+        $returnurl = new moodle_url($url);
+
+        // Check if its an image or subtitles
+        if (in_array($ext = core_media::get_extension($returnurl), $posterextensions)) {
+            $returnoptions['image'] = $returnurl;
+        }
+        if (in_array($ext,$subtitleextensions)) {
+            // Get subtitle label from filename with extension removed
+            $subtitlelabel = core_media::get_filename($returnurl);
+            $subtitlelabel = preg_replace('~\.[^.]*$~', '', $subtitlelabel);
+            $returnoptions['subtitles'][$subtitlelabel] = $returnurl;
+        }
+
+        $returnurls[] = $returnurl;
     }
 
-    return $returnurls;
+    $returndata = array (
+        'urls' => $returnurls,
+        'options' => $returnoptions
+    );
+	
+    return $returndata;
 }
 
 function filter_jwplayer_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {

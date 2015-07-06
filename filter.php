@@ -114,7 +114,8 @@ class filter_jwplayer extends moodle_text_filter {
 
         // Split provided URL into alternatives.
         $urls = filter_jwplayer_split_alternatives($matches[1], $width, $height);
-        $result = $this->renderer->embed_alternatives($urls, $name, $width, $height, $options);
+        $options = array_merge($url['options'],$options);
+        $result = $this->renderer->embed_alternatives($urls['urls'], $name, $width, $height, $options);
 
         // If something was embedded, return it, otherwise return original.
         if ($result !== '') {
