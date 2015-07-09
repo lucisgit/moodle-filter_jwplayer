@@ -27,6 +27,8 @@ $string['accounttoken'] = 'Cloud-hosted player account token';
 $string['accounttokendesc'] = 'Cloud-hosted player account token from account settings page on <a href="https://account.jwplayer.com/#/account">JW player website</a>. This is the file name from cloud-hosted player code, e.g. for script path http://jwpsrv.com/library/ABCDEF012345.js the corresponding account token that needs to be entered in the field above is ABCDEF012345. Not required if self-hosted player is used.';
 $string['downloadbutton'] = 'Download button';
 $string['downloadbuttondesc'] = 'Add a button in the upper left corner of the player for downloading the video file.';
+$string['defaultposter'] = 'Default poster';
+$string['defaultposterdesc'] = 'Default poster image to use with videos.';
 $string['enabledextensions'] = 'Enabled extensions';
 $string['enabledextensionsdesc'] = 'Only selected file extensions will be handled by the filter.';
 $string['errornoaccounttoken'] = 'Cloud-hosted player requires account token';
