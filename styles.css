@@ -2,3 +2,4 @@
  * Filter JWPlayer
  */
 .filter_jwplayer_media {display:block;margin-top:5px;margin-bottom:5px;text-align: center;}
+.filter_jwplayer_media .jwplayer{display:inline-block;}
