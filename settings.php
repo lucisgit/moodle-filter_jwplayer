@@ -99,6 +99,15 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect('filter_jwplayer/skin',
             get_string('useplayerskin', 'filter_jwplayer'), '', '', $skinoptions));
 
+    // Custom skin
+    $settings->add(new admin_setting_configstoredfile('filter_jwplayer/customskin',
+            get_string('customskin', 'filter_jwplayer'),
+            get_string('customskindesc', 'filter_jwplayer'),
+            'playerskin',
+            0,
+            array(
+                'accepted_types' => array('.xml')
+            )));
 
     // Google Analytics support.
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/googleanalytics',
