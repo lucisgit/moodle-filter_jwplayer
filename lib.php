@@ -105,7 +105,7 @@ function filter_jwplayer_pluginfile($course, $cm, $context, $filearea, $args, $f
     }
  
     // Make sure the filearea is one of those used by the plugin.
-    if ($filearea !== 'defaultposter') {
+    if ($filearea !== 'defaultposter' && $filearea !== 'playerskin') {
         return false;
     }
  
@@ -236,7 +236,10 @@ class filter_jwplayer_media extends core_media_player {
             }
 
             // Load skin.
-            if ($skin = get_config('filter_jwplayer', 'skin')) {
+            if ($customskin = get_config('filter_jwplayer', 'customskin')) {
+                $syscontext = context_system::instance();
+                $playersetupdata['skin'] = moodle_url::make_pluginfile_url($syscontext->id, 'filter_jwplayer', 'playerskin', null, null, $customskin)->out(true);                
+            } else if ($skin = get_config('filter_jwplayer', 'skin')) {
                 $playersetupdata['skin'] = $skin;
             }
 
