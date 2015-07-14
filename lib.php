@@ -279,7 +279,8 @@ class filter_jwplayer_media extends core_media_player {
 
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
             $playerdiv = html_writer::tag('span', $this->get_name('', $urls), array('id' => $playerid));
-            $output .= html_writer::tag('span', $playerdiv, array('class' => 'filter_jwplayer_media'));
+            $outerspan = html_writer::tag('span', $playerdiv, array('class' => 'filter_jwplayer_playerblock'));
+            $output .= html_writer::tag('span', $outerspan, array('class' => 'filter_jwplayer_media'));
         }
 
         return $output;
