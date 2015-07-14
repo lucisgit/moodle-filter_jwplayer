@@ -177,8 +177,14 @@ class filter_jwplayer_media extends core_media_player {
                 'file' => urldecode($url),
             );
             // Help to determine the type of mov.
-            if (strtolower(pathinfo($url, PATHINFO_EXTENSION)) === 'mov') {
+            $ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+            if ($ext === 'mov') {
                 $source['type'] = 'mp4';
+            } else if ($ext === 'm3u8' || $ext === 'smil') {
+                // HLS and Dynamic RTMP support requires flash on some platforms
+                // Set rendering mode to flash to ensure streams play if possible
+                // even when mp4 fallbacks are given.
+                $playersetupdata['primary'] = 'flash';
             }
 
             if ($url->get_scheme() === 'rtmp') {
