@@ -72,7 +72,7 @@ if ($ADMIN->fulltree) {
             get_string('supportrtmpdesc', 'filter_jwplayer'),
             0));
 
-    // Default Poster Image
+    // Default Poster Image.
     $settings->add(new admin_setting_configstoredfile('filter_jwplayer/defaultposter',
             get_string('defaultposter', 'filter_jwplayer'),
             get_string('defaultposterdesc', 'filter_jwplayer'),
@@ -87,6 +87,16 @@ if ($ADMIN->fulltree) {
             get_string('downloadbutton', 'filter_jwplayer'),
             get_string('downloadbuttondesc', 'filter_jwplayer'),
             0));
+            
+    // Display Style (Fixed Width or Responsive).
+    $displaystylechoice = array(
+        'fixed' => get_string('displayfixed', 'filter_jwplayer'),
+        'responsive' => get_string('displayresponsive', 'filter_jwplayer'),
+    );
+    $settings->add(new admin_setting_configselect('filter_jwplayer/displaystyle',
+            get_string('displaystyle', 'filter_jwplayer'),
+            get_string('displaystyledesc', 'filter_jwplayer'),
+            'fixed', $displaystylechoice));
 
     $settings->add(new admin_setting_heading('paideditionsconfig',
             get_string('paideditionsconfig', 'filter_jwplayer'),

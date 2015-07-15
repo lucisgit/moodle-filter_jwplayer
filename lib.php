@@ -31,6 +31,11 @@ if (!defined('FILTER_JWPLAYER_VIDEO_WIDTH')) {
     // May be defined in config.php if required.
     define('FILTER_JWPLAYER_VIDEO_WIDTH', 400);
 }
+if (!defined('FILTER_JWPLAYER_VIDEO_WIDTH_RESPONSIVE')) {
+    // Default video width if no width is specified.
+    // May be defined in config.php if required.
+    define('FILTER_JWPLAYER_VIDEO_WIDTH_RESPONSIVE', '100%');
+}
 if (!defined('FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W')) {
     // Default video aspect ratio for responsive mode if no height is specified.
     // May be defined in config.php if required.
@@ -248,7 +253,13 @@ class filter_jwplayer_media extends core_media_player {
 						
             // If width is not provided, use default.
             if (!$width) {
-                $width = FILTER_JWPLAYER_VIDEO_WIDTH;
+                // Use responsive width if choosen in settings otherwise default to fixed width.
+                if(get_config('filter_jwplayer', 'displaystyle') === 'responsive') {
+                    $width = FILTER_JWPLAYER_VIDEO_WIDTH_RESPONSIVE;
+                }
+                else {
+                    $width = FILTER_JWPLAYER_VIDEO_WIDTH;
+                }
             } 
 
             if(is_numeric($width)) {
@@ -256,6 +267,13 @@ class filter_jwplayer_media extends core_media_player {
             }
             $playersetupdata['width'] = $width;
 
+            // If width is a percentage surrounding span needs to have its width set so it does not default to 0px. 
+            $outerspanargs = array('class' => 'filter_jwplayer_playerblock');
+            if(!is_numeric($width)) {
+                $outerspanargs['style'] = 'width: '.$width.';';
+                $width = '100%';  // As the outer span in now at the required width, we set the width of the player to 100%.
+            }
+            
             // Automatically set the height unless it is specified
             if ($height) {
                 if(is_numeric($height)) {
@@ -324,7 +342,7 @@ class filter_jwplayer_media extends core_media_player {
 
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
             $playerdiv = html_writer::tag('span', $this->get_name('', $urls), array('id' => $playerid));
-            $outerspan = html_writer::tag('span', $playerdiv, array('class' => 'filter_jwplayer_playerblock'));
+            $outerspan = html_writer::tag('span', $playerdiv, $outerspanargs);
             $output .= html_writer::tag('span', $outerspan, $newattributes);
         }
 
