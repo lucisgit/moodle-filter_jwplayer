@@ -31,15 +31,25 @@ if (!defined('FILTER_JWPLAYER_VIDEO_WIDTH')) {
     // May be defined in config.php if required.
     define('FILTER_JWPLAYER_VIDEO_WIDTH', 400);
 }
+if (!defined('FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W')) {
+    // Default video aspect ratio for responsive mode if no height is specified.
+    // May be defined in config.php if required.
+    define('FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W', 16);
+}
+if (!defined('FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H')) {
+    // Default video aspect ratio for responsive mode if no height is specified.
+    // May be defined in config.php if required.
+    define('FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H', 9);
+}
 if (!defined('FILTER_JWPLAYER_AUDIO_WIDTH')) {
     // Default audio width if no width is specified.
     // May be defined in config.php if required.
     define('FILTER_JWPLAYER_AUDIO_WIDTH', 400);
 }
-if (!defined('FILTER_JWPLAYER_AUDIO_HEIGTH')) {
-    // Default audio heigth if no heigth is specified.
+if (!defined('FILTER_JWPLAYER_AUDIO_HEIGHT')) {
+    // Default audio heigth if no height is specified.
     // May be defined in config.php if required.
-    define('FILTER_JWPLAYER_AUDIO_HEIGTH', 30);
+    define('FILTER_JWPLAYER_AUDIO_HEIGHT', 30);
 }
 
 /**
@@ -69,20 +79,25 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
 
         // You can specify the size as a separate part of the array like
         // #d=640x480 without actually including a url in it.
-        if (preg_match('/^d=([\d]{1,4})x([\d]{1,4})$/i', $url, $matches)) {
+        if (preg_match('/^d=([\d]{1,4}\.?[\d]*%?)x([\d]{1,4}\.?[\d]*%?)$/i', $url, $matches)) {
             $width  = $matches[1];
             $height = $matches[2];
+            continue;
+        } else if (preg_match('/^d=([\d]{1,4}\.?[\d]*%?)$/i', $url, $matches)) {
+            $width = $matches[1];
             continue;
         }
 
         // Can also include the ?d= as part of one of the URLs (if you use
         // more than one they will be ignored except the last).
-        if (preg_match('/\?d=([\d]{1,4})x([\d]{1,4})$/i', $url, $matches)) {
+        if (preg_match('/\?d=([\d]{1,4}\.?[\d]*%?)x([\d]{1,4}\.?[\d]*%?)$/i', $url, $matches)) {
             $width  = $matches[1];
             $height = $matches[2];
 
             // Trim from URL.
             $url = str_replace($matches[0], '', $url);
+        } else if (preg_match('/\?d=([\d]{1,4}\.?[\d]*%?)$/i', $url, $matches)) {
+            $width = $matches[1];
         }
 
         // Clean up url.
@@ -225,20 +240,41 @@ class filter_jwplayer_media extends core_media_player {
 
             $playersetupdata['playlist'] = array($playlistitem);
 
+            // If we are dealing with audio, show just the control bar.
+            if (mimeinfo('string', $sources[0]['file']) === 'audio') {
+                $width = FILTER_JWPLAYER_AUDIO_WIDTH;
+                $height = FILTER_JWPLAYER_AUDIO_HEIGHT;
+            }
+						
             // If width is not provided, use default.
             if (!$width) {
                 $width = FILTER_JWPLAYER_VIDEO_WIDTH;
+            } 
+
+            if(is_numeric($width)) {
+                $width = round($width);
             }
             $playersetupdata['width'] = $width;
-            // Let player choose the height unless it is provided.
-            if ($height) {
-                $playersetupdata['height'] = $height;
-            }
 
-            // If we are dealing with audio, show just the control bar.
-            if (mimeinfo('string', $sources[0]['file']) === 'audio') {
-                $playersetupdata['width'] = FILTER_JWPLAYER_AUDIO_WIDTH;
-                $playersetupdata['height'] = FILTER_JWPLAYER_AUDIO_HEIGTH;
+            // Automatically set the height unless it is specified
+            if ($height) {
+                if(is_numeric($height)) {
+                    $playersetupdata['height'] = $height;
+                } else if(is_numeric($width)) {
+                    // If width is numeric and height is percentage, calculate height from width
+                    $playersetupdata['height'] = round($width * floatval($height) / 100);
+                } else {
+                    // If width is also percentage, then set aspect ratio
+                    $playersetupdata['aspectratio'] = "100:".floatval($height);
+                }
+            } else {
+                if (is_numeric($width)){
+                    // If width is numeric calculate height from default aspect ratio
+                    $playersetupdata['height'] = round($width * FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H / FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W);
+                } else {
+                // Responsive videos need aspect ratio set to automatically set height
+                $playersetupdata['aspectratio'] = FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W.":".FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H;
+                }
             }
 
             // Load skin.
