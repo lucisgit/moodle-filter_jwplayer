@@ -312,11 +312,20 @@ class filter_jwplayer_media extends core_media_player {
             );
 
             $this->setup();
+			
+            // Set attrigbutes for player span tag
+            $newattributes = array(
+                'class' => 'filter_jwplayer_media'
+            );
+
+            if(isset($options['htmlattributes']['style'])){
+                $newattributes['style'] = $options['htmlattributes']['style'];
+            }
 
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
             $playerdiv = html_writer::tag('span', $this->get_name('', $urls), array('id' => $playerid));
             $outerspan = html_writer::tag('span', $playerdiv, array('class' => 'filter_jwplayer_playerblock'));
-            $output .= html_writer::tag('span', $outerspan, array('class' => 'filter_jwplayer_media'));
+            $output .= html_writer::tag('span', $outerspan, $newattributes);
         }
 
         return $output;
