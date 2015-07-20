@@ -194,7 +194,7 @@ class filter_jwplayer_media extends core_media_player {
         foreach ($urls as $url) {
             // Add the details for this source.
             $source = array(
-                'file' => urldecode($url),
+                'file' => urldecode($url->out(false)),
             );
             // Help to determine the type of mov.
             $ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
@@ -226,7 +226,7 @@ class filter_jwplayer_media extends core_media_player {
 
             // setup poster image
             if (isset($options['image'])) {
-                $playlistitem['image'] = $options['image']->out();
+                $playlistitem['image'] = urldecode($options['image']->out(false));
             } else if ($poster = get_config('filter_jwplayer', 'defaultposter')) {
                 $syscontext = context_system::instance();
                 $playlistitem['image'] = moodle_url::make_pluginfile_url($syscontext->id, 'filter_jwplayer', 'defaultposter', null, null, $poster)->out(true);
@@ -237,7 +237,7 @@ class filter_jwplayer_media extends core_media_player {
                 $tracks = array();
                 foreach ($options['subtitles'] as $label => $subtitlefileurl) {
                     $tracks[] = array(
-                        'file' => $subtitlefileurl->out(),
+                        'file' => urldecode($subtitlefileurl->out(false)),
                         'label' => $label);
                 }
                 $playlistitem['tracks'] = $tracks;
