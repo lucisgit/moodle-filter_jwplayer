@@ -197,6 +197,10 @@ class filter_jwplayer_media extends core_media_player {
             $ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
             if ($ext === 'mov') {
                 $source['type'] = 'mp4';
+            } else if ($ext === 'mpd') {
+                // Dash variable needs to be set if we have a dash stream_bucket_append
+                $playersetupdata['dash'] = true;
+                $isstream = true;
             }
 
             if ($url->get_scheme() === 'rtmp' || $ext === 'm3u8' || $ext === 'smil') {
@@ -290,7 +294,9 @@ class filter_jwplayer_media extends core_media_player {
             }
 
             // Load skin.
-            if ($customskin = get_config('filter_jwplayer', 'customskin')) {
+            if ($customskincss = get_config('filter_jwplayer', 'customskincss')) {
+                $playersetupdata['skin'] = $customskincss;
+            } else if ($customskin = get_config('filter_jwplayer', 'customskin')) {
                 $syscontext = context_system::instance();
                 $playersetupdata['skin'] = moodle_url::make_pluginfile_url($syscontext->id, 'filter_jwplayer', 'playerskin', null, null, $customskin)->out(true);
             } else if ($skin = get_config('filter_jwplayer', 'skin')) {
@@ -366,7 +372,7 @@ class filter_jwplayer_media extends core_media_player {
     public function list_supported_extensions() {
         $video = array('mp4', 'm4v', 'f4v', 'mov', 'flv', 'webm', 'ogv');
         $audio = array('aac', 'm4a', 'f4a', 'mp3', 'ogg', 'oga');
-        $streaming = array('m3u8', 'smil');
+        $streaming = array('m3u8', 'smil', 'mpd');
         return array_merge($video, $audio, $streaming);
     }
 

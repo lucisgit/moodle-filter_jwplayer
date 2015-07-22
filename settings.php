@@ -61,6 +61,7 @@ if ($ADMIN->fulltree) {
     // Enabled extensions.
     $supportedextensions = $jwplayer->list_supported_extensions();
     $enabledextensionsmenu = array_combine($supportedextensions, $supportedextensions);
+    array_splice($supportedextensions, array_search('mpd', $supportedextensions), 1);  // disable mpeg-dash by default in case we are using JWPlayer 6
     $settings->add(new admin_setting_configmultiselect('filter_jwplayer/enabledextensions',
             get_string('enabledextensions', 'filter_jwplayer'),
             get_string('enabledextensionsdesc', 'filter_jwplayer'),
@@ -116,6 +117,11 @@ if ($ADMIN->fulltree) {
             'playerskin',
             0,
             array('accepted_types' => array('.xml'))));
+            
+    $settings->add(new admin_setting_configtext('filter_jwplayer/customskincss',
+            get_string('customskincss', 'filter_jwplayer'),
+            get_string('customskincssdesc', 'filter_jwplayer'),
+            ''));
 
     // Google Analytics support.
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/googleanalytics',
