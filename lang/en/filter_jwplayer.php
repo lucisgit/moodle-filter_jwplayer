@@ -40,10 +40,10 @@ $string['enabledextensionsdesc'] = 'Only selected file extensions will be handle
 $string['errornoaccounttoken'] = 'Cloud-hosted player requires account token';
 $string['errornojwplayerinstalled'] = 'No JW player files found in Moodle';
 $string['filtername'] = 'JW Player multimedia filter';
-$string['googleanalytics'] = 'Google Analytics Integration (Premium only)';
-$string['googleanalyticsdesc'] = 'Enable integration with Google Analytics.  Requires Google Analytics code to already be added to pages.  See details on the <a href="http://support.jwplayer.com/customer/portal/articles/1417179-integration-with-google-analytics">JW player website</a> for more information.';
 $string['gatrackingobject'] = 'Google Analytics Tracking Object';
 $string['gatrackingobjectdesc'] = 'If you have changed the name of tracking object variable used by Google Analytics, set this here.  In most cases the default _gaq should be correct.';
+$string['googleanalytics'] = 'Google Analytics Integration (Premium only)';
+$string['googleanalyticsdesc'] = 'Enable integration with Google Analytics.  Requires Google Analytics code to already be added to pages.  See details on the <a href="http://support.jwplayer.com/customer/portal/articles/1417179-integration-with-google-analytics">JW player website</a> for more information.';
 $string['hostingmethod'] = 'Player hosting method';
 $string['hostingmethodcloud'] = 'Cloud-hosted';
 $string['hostingmethoddesc'] = 'Cloud hosted JW player is used by default. If you prefer self-hosted option, make sure you downloaded JW player files and placed them in /lib/jwplayer/ directory in Moodle.';

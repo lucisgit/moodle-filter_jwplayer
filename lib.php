@@ -121,20 +121,17 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
 function filter_jwplayer_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     if ($context->contextlevel != CONTEXT_SYSTEM) {
-        return false; 
+        return false;
     }
- 
+
     // Make sure the filearea is one of those used by the plugin.
     if ($filearea !== 'defaultposter' && $filearea !== 'playerskin') {
         return false;
     }
- 
+
     // Make sure the user is logged in and has access to the module (plugins that are not course modules should leave out the 'cm' part).
     require_login($course, true);
- 
-    // Use the itemid to retrieve any relevant data records and perform any security checks to see if the
-    // user really does have access to the file in question.
- 
+
     // Extract the filename / filepath from the $args array.
     $filename = array_pop($args); // The last item in the $args array.
     if (!$args) {
@@ -142,16 +139,15 @@ function filter_jwplayer_pluginfile($course, $cm, $context, $filearea, $args, $f
     } else {
         $filepath = '/'.implode('/', $args).'/'; // $args contains elements of the filepath
     }
- 
+
     // Retrieve the file from the Files API.
     $fs = get_file_storage();
     $file = $fs->get_file($context->id, 'filter_jwplayer', $filearea, 0, $filepath, $filename);
     if (!$file) {
         return false; // The file does not exist.
     }
- 
-    // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering. 
-    // From Moodle 2.3, use send_stored_file instead.
+
+    // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
     send_stored_file($file, 86400, 0, $forcedownload, $options);
 }
 
@@ -174,7 +170,7 @@ class filter_jwplayer_media extends core_media_player {
      * @param int $width Optional width; 0 to use default
      * @param int $height Optional height; 0 to use default
      * @param array $options Options array
-     *                       poster
+     *                       image
      *                           use 'image' key with a moodle_url to an image as poster image
      *                           displayed before playback starts.
      *                       subtitles
@@ -224,7 +220,7 @@ class filter_jwplayer_media extends core_media_player {
 
             $playlistitem = array('sources' => $sources);
 
-            // setup poster image
+            // Setup poster image.
             if (isset($options['image'])) {
                 $playlistitem['image'] = urldecode($options['image']->out(false));
             } else if ($poster = get_config('filter_jwplayer', 'defaultposter')) {
@@ -232,13 +228,14 @@ class filter_jwplayer_media extends core_media_player {
                 $playlistitem['image'] = moodle_url::make_pluginfile_url($syscontext->id, 'filter_jwplayer', 'defaultposter', null, null, $poster)->out(true);
             }
 
-            // setup subtitle tracks
+            // Setup subtitle tracks.
             if (isset($options['subtitles'])) {
                 $tracks = array();
                 foreach ($options['subtitles'] as $label => $subtitlefileurl) {
                     $tracks[] = array(
                         'file' => urldecode($subtitlefileurl->out(false)),
-                        'label' => $label);
+                        'label' => $label,
+                    );
                 }
                 $playlistitem['tracks'] = $tracks;
             }
@@ -250,47 +247,46 @@ class filter_jwplayer_media extends core_media_player {
                 $width = FILTER_JWPLAYER_AUDIO_WIDTH;
                 $height = FILTER_JWPLAYER_AUDIO_HEIGHT;
             }
-						
+
             // If width is not provided, use default.
             if (!$width) {
                 // Use responsive width if choosen in settings otherwise default to fixed width.
-                if(get_config('filter_jwplayer', 'displaystyle') === 'responsive') {
+                if (get_config('filter_jwplayer', 'displaystyle') === 'responsive') {
                     $width = FILTER_JWPLAYER_VIDEO_WIDTH_RESPONSIVE;
-                }
-                else {
+                } else {
                     $width = FILTER_JWPLAYER_VIDEO_WIDTH;
                 }
-            } 
+            }
 
-            if(is_numeric($width)) {
+            if (is_numeric($width)) {
                 $width = round($width);
             }
             $playersetupdata['width'] = $width;
 
-            // If width is a percentage surrounding span needs to have its width set so it does not default to 0px. 
+            // If width is a percentage surrounding span needs to have its width set so it does not default to 0px.
             $outerspanargs = array('class' => 'filter_jwplayer_playerblock');
             if(!is_numeric($width)) {
                 $outerspanargs['style'] = 'width: '.$width.';';
                 $width = '100%';  // As the outer span in now at the required width, we set the width of the player to 100%.
             }
-            
-            // Automatically set the height unless it is specified
+
+            // Automatically set the height unless it is specified.
             if ($height) {
-                if(is_numeric($height)) {
+                if (is_numeric($height)) {
                     $playersetupdata['height'] = $height;
-                } else if(is_numeric($width)) {
-                    // If width is numeric and height is percentage, calculate height from width
+                } else if (is_numeric($width)) {
+                    // If width is numeric and height is percentage, calculate height from width.
                     $playersetupdata['height'] = round($width * floatval($height) / 100);
                 } else {
-                    // If width is also percentage, then set aspect ratio
+                    // If width is also percentage, then set aspect ratio.
                     $playersetupdata['aspectratio'] = "100:".floatval($height);
                 }
             } else {
-                if (is_numeric($width)){
-                    // If width is numeric calculate height from default aspect ratio
+                if (is_numeric($width)) {
+                    // If width is numeric calculate height from default aspect ratio.
                     $playersetupdata['height'] = round($width * FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H / FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W);
                 } else {
-                // Responsive videos need aspect ratio set to automatically set height
+                // Responsive videos need aspect ratio set to automatically set height.
                 $playersetupdata['aspectratio'] = FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W.":".FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H;
                 }
             }
@@ -298,7 +294,7 @@ class filter_jwplayer_media extends core_media_player {
             // Load skin.
             if ($customskin = get_config('filter_jwplayer', 'customskin')) {
                 $syscontext = context_system::instance();
-                $playersetupdata['skin'] = moodle_url::make_pluginfile_url($syscontext->id, 'filter_jwplayer', 'playerskin', null, null, $customskin)->out(true);                
+                $playersetupdata['skin'] = moodle_url::make_pluginfile_url($syscontext->id, 'filter_jwplayer', 'playerskin', null, null, $customskin)->out(true);
             } else if ($skin = get_config('filter_jwplayer', 'skin')) {
                 $playersetupdata['skin'] = $skin;
             }
@@ -307,15 +303,15 @@ class filter_jwplayer_media extends core_media_player {
             if (get_config('filter_jwplayer', 'downloadbutton')) {
                 $downloadbtn = array(
                     'img' => $CFG->wwwroot.'/filter/jwplayer/img/download.png',
-                    'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer')
+                    'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer'),
                 );
             }
 
             if (get_config('filter_jwplayer', 'googleanalytics')) {
                 $playersetupdata['ga'] = array(
-                    'trackingobject' => get_config('filter_jwplayer', 'gatrackingobject')
+                    'trackingobject' => get_config('filter_jwplayer', 'gatrackingobject'),
                 );
-            }			
+            }
 
             $playersetup = array(
                 'playerid' => $playerid,
@@ -416,6 +412,8 @@ class filter_jwplayer_media extends core_media_player {
     }
 
     /**
+     * Checks if player is enabled.
+     *
      * @return bool True if player is enabled
      */
     public function is_enabled() {
@@ -436,10 +434,12 @@ class filter_jwplayer_media extends core_media_player {
 
     /**
      * Loads and setup the jwplayer library.
+     *
+     * @return void
      */
     private function setup() {
         global $PAGE;
-        
+
         $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
         if ($hostingmethod === 'cloud') {
             $proto = (get_config('filter_jwplayer', 'securehosting')) ? 'https' : 'http';
