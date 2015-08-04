@@ -186,6 +186,7 @@ class filter_jwplayer_media extends core_media_player {
 
         $sources = array();
         $playersetupdata = array();
+        $isstream = false;
 
         foreach ($urls as $url) {
             // Add the details for this source.
@@ -196,18 +197,15 @@ class filter_jwplayer_media extends core_media_player {
             $ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
             if ($ext === 'mov') {
                 $source['type'] = 'mp4';
-            } else if ($ext === 'm3u8' || $ext === 'smil') {
-                // HLS and Dynamic RTMP support requires flash on some platforms
-                // Set rendering mode to flash to ensure streams play if possible
-                // even when mp4 fallbacks are given.
-                $playersetupdata['primary'] = 'flash';
             }
 
-            if ($url->get_scheme() === 'rtmp') {
-                // For RTMP we set rendering mode to Flash and making sure
-                // URL is the first in the list.
+            if ($url->get_scheme() === 'rtmp' || $ext === 'm3u8' || $ext === 'smil') {
+                // For RTMP, HLS and Dynamic RTMP we set rendering mode to Flash to
+                // ensure streams play is possible even when mp4 fallbacks are given.
+                // Also make sure that URL is the first in the list.
                 $playersetupdata['primary'] = 'flash';
                 array_unshift($sources, $source);
+                $isstream = true;
             } else {
                 $sources[] = $source;
             }
@@ -300,7 +298,7 @@ class filter_jwplayer_media extends core_media_player {
             }
 
             $downloadbtn = null;
-            if (get_config('filter_jwplayer', 'downloadbutton')) {
+            if (get_config('filter_jwplayer', 'downloadbutton') && !$isstream) {
                 $downloadbtn = array(
                     'img' => $CFG->wwwroot.'/filter/jwplayer/img/download.png',
                     'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer'),
