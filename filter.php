@@ -104,13 +104,8 @@ class filter_jwplayer extends moodle_text_filter {
         }
 
         // Get <a> tag attributes
-        $escapedmatch = preg_replace('/&(?!(?:apos|quot|[gl]t|amp);|#)/','&amp;',$matches[0]); // Escape any unescaped & characters from the URLs
-        $doc = new DOMDocument();
-        $doc->strictErrorChecking = FALSE;
-        $doc->loadHTML($escapedmatch);  // Load HTML as a DOMDocument
-        if($atag = simplexml_import_dom($doc)){  // Make sure xml is valid xml if not do nothing
-            $options['htmlattributes'] = $atag->attributes();
-        }
+        $atag = new SimpleXMLElement($matches[0]);
+        $options['htmlattributes'] = $atag->attributes();
 
         // Split provided URL into alternatives.
         $urls = filter_jwplayer_split_alternatives($matches[1], $width, $height);
