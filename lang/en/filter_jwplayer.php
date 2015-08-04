@@ -26,7 +26,7 @@
 $string['accounttoken'] = 'Cloud-hosted player account token';
 $string['accounttokendesc'] = 'Cloud-hosted player account token from account settings page on <a href="https://account.jwplayer.com/#/account">JW player website</a>. This is the file name from cloud-hosted player code, e.g. for script path http://jwpsrv.com/library/ABCDEF012345.js the corresponding account token that needs to be entered in the field above is ABCDEF012345. Not required if self-hosted player is used.';
 $string['customskin'] = 'Custom skin file';
-$string['customskindesc'] = 'Use a custom skin.  This must be packaged in xml format as described on the <a href="http://support.jwplayer.com/customer/portal/articles/1412123-building-jw-player-skins">JWPlayer website</a>.';
+$string['customskindesc'] = 'Use a custom skin.  This must be packaged in xml format as described on the <a href="http://support.jwplayer.com/customer/portal/articles/2051702-jw6-building-jw-player-skins">JWPlayer website</a>.';
 $string['downloadbutton'] = 'Download button';
 $string['downloadbuttondesc'] = 'Add a button in the upper left corner of the player for downloading the video file.';
 $string['defaultposter'] = 'Default poster';
