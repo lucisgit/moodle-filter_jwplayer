@@ -1,11 +1,12 @@
 moodle-filter_jwplayer
 ======================
 
-This is Moodle filter that allows using JW Player for playing HTML5 and flash
-content. The filter is designed to achieve consistency of the player appearance
-in all major browsers and mobile platforms. The player supports flash fallback,
-providing more devices and formats coverage than either HTML5 or flash can
-handle alone. The filter also supports RTMP and HLS streams.
+This is Moodle filter that allows using JW Player version 6 for playing
+HTML5 and flash content. The filter is designed to achieve consistency of
+the player appearance in all major browsers and mobile platforms. The
+player supports flash fallback, providing more devices and formats coverage
+than either HTML5 or flash can handle alone. The filter also supports RTMP
+and HLS streams.
 
 Installation
 ------------
@@ -19,7 +20,7 @@ installing them locally, or configuring filter to use the cloud version of JW
 Player. In either cases the first step would be to register on JW Player
 website https://account.jwplayer.com/ and accept terms and conditions. Once
 this step is done, you have a choice of using cloud version (hosted by JW
-Player) or download the self-hosted version of the player and unpack it to
+Player) or download the self-hosted version of the JW Player 6 and unpack it to
 ./lib/jwplayer/ directory in Moodle (that is where filter will be looking for
 it in case you will select self-hosted option in the filter settings). Using
 cloud version is recommended by JW Player, for full comparions see [this
