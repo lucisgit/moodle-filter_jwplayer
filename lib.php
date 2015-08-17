@@ -197,6 +197,10 @@ class filter_jwplayer_media extends core_media_player {
             $ext = core_media::get_extension($url);
             if ($ext === 'mov') {
                 $source['type'] = 'mp4';
+            } else if ($ext === 'mpd') {
+                // Dash variable needs to be set if we have a dash stream_bucket_append
+                $playersetupdata['dash'] = true;
+                $isstream = true;
             }
 
             if ($url->get_scheme() === 'rtmp' || $ext === 'm3u8' || $ext === 'smil') {
@@ -365,7 +369,7 @@ class filter_jwplayer_media extends core_media_player {
     public function list_supported_extensions() {
         $video = array('mp4', 'm4v', 'f4v', 'mov', 'flv', 'webm', 'ogv');
         $audio = array('aac', 'm4a', 'f4a', 'mp3', 'ogg', 'oga');
-        $streaming = array('m3u8', 'smil');
+        $streaming = array('m3u8', 'smil', 'mpd');
         return array_merge($video, $audio, $streaming);
     }
 
