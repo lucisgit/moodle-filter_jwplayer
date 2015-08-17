@@ -218,7 +218,7 @@ class filter_jwplayer_media extends core_media_player {
         if (count($sources) > 0) {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
-            
+
             // Process data-jwplayer attributes.
             foreach ($options['htmlattributes'] as $attrib => $atval) {
                 if (strpos($attrib, 'data-jwplayer-') === 0) {  // treat attributes starting data-jwplayer as options.
@@ -252,7 +252,7 @@ class filter_jwplayer_media extends core_media_player {
                     // Pass any other global HTML attributes to the player span tag.
                     $globalhtmlattributes = array('accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate');
                     if (in_array($attrib, $globalhtmlattributes) || strpos($attrib, 'data-' === 0)) {
-                        $newattributes[$attrib] = $atval;  
+                        $newattributes[$attrib] = $atval;
                     }
                 }
             }
@@ -353,9 +353,23 @@ class filter_jwplayer_media extends core_media_player {
                 );
             }
 
+            // Set Google Analytics settings if enabled.
             if (get_config('filter_jwplayer', 'googleanalytics')) {
+                if (isset($options['gaidstring'])) {
+                    $gaidstring = $options['gaidstring'];
+                } else {
+                    $gaidstring = get_config('filter_jwplayer', 'gaidstring');
+                }
+
+                if (isset($options['galabel'])) {
+                    $galabel = $options['galabel'];
+                } else {
+                    $galabel = get_config('filter_jwplayer', 'galabel');
+                }
+
                 $playersetupdata['ga'] = array(
-                    'trackingobject' => get_config('filter_jwplayer', 'gatrackingobject'),
+                    'idstring' => $gaidstring,
+                    'label' => $galabel
                 );
             }
 
@@ -372,7 +386,7 @@ class filter_jwplayer_media extends core_media_player {
             );
 
             $this->setup();
-			
+
             // Set required class for player span tag.
             if (isset($options['htmlattributes']['class'])) {
                 $newattributes['class'] .= ' filter_jwplayer_media';
