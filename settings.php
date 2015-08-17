@@ -99,10 +99,6 @@ if ($ADMIN->fulltree) {
             get_string('displaystyledesc', 'filter_jwplayer'),
             'fixed', $displaystylechoice));
 
-    $settings->add(new admin_setting_heading('paideditionsconfig',
-            get_string('paideditionsconfig', 'filter_jwplayer'),
-            get_string('paideditionsconfigdescr', 'filter_jwplayer')));
-
     // Skins.
     $skins = array('beelden', 'bekle', 'five', 'glow', 'roundster', 'six', 'stormtrooper', 'vapor');
     $skinoptions = array('' => get_string('standardskin', 'filter_jwplayer'));
