@@ -290,9 +290,8 @@ class filter_jwplayer_media extends core_media_player {
             }
 
             // Load skin.
-            if ($customskin = get_config('filter_jwplayer', 'customskin')) {
-                $syscontext = context_system::instance();
-                $playersetupdata['skin'] = moodle_url::make_pluginfile_url($syscontext->id, 'filter_jwplayer', 'playerskin', null, null, $customskin)->out(true);
+            if ($customskincss = get_config('filter_jwplayer', 'customskincss')) {
+                $playersetupdata['skin'] = $customskincss;
             } else if ($skin = get_config('filter_jwplayer', 'skin')) {
                 $playersetupdata['skin'] = $skin;
             }
