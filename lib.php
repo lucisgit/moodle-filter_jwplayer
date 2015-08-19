@@ -377,10 +377,14 @@ class filter_jwplayer_media extends core_media_player {
                 );
             }
 
+            // Pass the page context variables for logging
+            $logcontext = $PAGE->context->id;
+
             $playersetup = array(
                 'playerid' => $playerid,
                 'setupdata' => $playersetupdata,
                 'downloadbtn' => $downloadbtn,
+                'logcontext' => $logcontext
             );
 
             // Set up the player.
