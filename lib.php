@@ -194,7 +194,7 @@ class filter_jwplayer_media extends core_media_player {
                 'file' => urldecode($url->out(false)),
             );
             // Help to determine the type of mov.
-            $ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+            $ext = core_media::get_extension($url);
             if ($ext === 'mov') {
                 $source['type'] = 'mp4';
             }
