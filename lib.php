@@ -214,9 +214,9 @@ class filter_jwplayer_media extends core_media_player {
         if (count($sources) > 0) {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
-            $playersetupdata['title'] = $this->get_name('', $urls);
-
             $playlistitem = array('sources' => $sources);
+            
+            $playlistitem['title'] = $this->get_name('', $urls);
 
             // Setup poster image.
             if (isset($options['image'])) {
