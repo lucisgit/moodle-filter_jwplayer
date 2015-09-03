@@ -223,7 +223,7 @@ class filter_jwplayer_media extends core_media_player {
             $playlistitem['title'] = $this->get_name('', $urls);
 
             // Setup poster image.
-            if (isset($options['image'])) {
+            if (isset($options['image']) && $options['image'] instanceof moodle_url) {
                 $playlistitem['image'] = urldecode($options['image']->out(false));
             } else if ($poster = get_config('filter_jwplayer', 'defaultposter')) {
                 $syscontext = context_system::instance();
@@ -234,10 +234,12 @@ class filter_jwplayer_media extends core_media_player {
             if (isset($options['subtitles'])) {
                 $tracks = array();
                 foreach ($options['subtitles'] as $label => $subtitlefileurl) {
-                    $tracks[] = array(
-                        'file' => urldecode($subtitlefileurl->out(false)),
-                        'label' => $label,
-                    );
+                    if ($subtitlefileurl instanceof moodle_url) {
+                        $tracks[] = array(
+                            'file' => urldecode($subtitlefileurl->out(false)),
+                            'label' => $label,
+                        );
+                    }
                 }
                 $playlistitem['tracks'] = $tracks;
             }
