@@ -61,6 +61,7 @@ if ($ADMIN->fulltree) {
     // Enabled extensions.
     $supportedextensions = $jwplayer->list_supported_extensions();
     $enabledextensionsmenu = array_combine($supportedextensions, $supportedextensions);
+    array_splice($supportedextensions, array_search('mpd', $supportedextensions), 1);  // disable mpeg-dash as it requires premium licence or higher.
     $settings->add(new admin_setting_configmultiselect('filter_jwplayer/enabledextensions',
             get_string('enabledextensions', 'filter_jwplayer'),
             get_string('enabledextensionsdesc', 'filter_jwplayer'),
@@ -110,12 +111,10 @@ if ($ADMIN->fulltree) {
             get_string('useplayerskin', 'filter_jwplayer'), '', '', $skinoptions));
 
     // Custom skin.
-    $settings->add(new admin_setting_configstoredfile('filter_jwplayer/customskin',
-            get_string('customskin', 'filter_jwplayer'),
-            get_string('customskindesc', 'filter_jwplayer'),
-            'playerskin',
-            0,
-            array('accepted_types' => array('.xml'))));
+    $settings->add(new admin_setting_configtext('filter_jwplayer/customskincss',
+            get_string('customskincss', 'filter_jwplayer'),
+            get_string('customskincssdesc', 'filter_jwplayer'),
+            ''));
 
     // Google Analytics support.
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/googleanalytics',
