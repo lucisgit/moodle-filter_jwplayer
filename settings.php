@@ -62,6 +62,7 @@ if ($ADMIN->fulltree) {
     $supportedextensions = $jwplayer->list_supported_extensions();
     $enabledextensionsmenu = array_combine($supportedextensions, $supportedextensions);
     array_splice($supportedextensions, array_search('mpd', $supportedextensions), 1);  // disable mpeg-dash as it requires premium licence or higher.
+    array_splice($supportedextensions, array_search('m3u8', $supportedextensions), 1);  // disable HLS by default as it needs a Premium licence
     $settings->add(new admin_setting_configmultiselect('filter_jwplayer/enabledextensions',
             get_string('enabledextensions', 'filter_jwplayer'),
             get_string('enabledextensionsdesc', 'filter_jwplayer'),
@@ -98,10 +99,6 @@ if ($ADMIN->fulltree) {
             get_string('displaystyle', 'filter_jwplayer'),
             get_string('displaystyledesc', 'filter_jwplayer'),
             'fixed', $displaystylechoice));
-
-    $settings->add(new admin_setting_heading('paideditionsconfig',
-            get_string('paideditionsconfig', 'filter_jwplayer'),
-            get_string('paideditionsconfigdescr', 'filter_jwplayer')));
 
     // Skins.
     $skins = array('beelden', 'bekle', 'five', 'glow', 'roundster', 'six', 'stormtrooper', 'vapor');
