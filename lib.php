@@ -273,10 +273,11 @@ class filter_jwplayer_media extends core_media_player {
             if (isset($options['description'])) {
                 $playlistitem['description'] = $options['description'];
             }
-            // Setup video mediaid.
-            if (isset($options['mediaid'])) {
 
+            // Setup video mediaid and use this for the playerid.
+            if (isset($options['mediaid']) && strlen(trim($options['mediaid']))) {
                 $playlistitem['mediaid'] = $options['mediaid'];
+                $playerid = 'filter_jwplayer_media_' . preg_replace('/\s+/', '', $options['mediaid']);
             }
 
             // Setup poster image.
