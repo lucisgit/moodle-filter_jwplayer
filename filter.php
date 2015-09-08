@@ -95,13 +95,16 @@ class filter_jwplayer extends moodle_text_filter {
             return $matches[0];
         }
 
-        $options = array();
-		
         // Get name.
         $name = trim($matches[2]);
         if (empty($name) or strpos($name, 'http') === 0) {
             $name = ''; // Use default name.
         }
+
+        // Prepare options.
+        $options = array(
+            'htmlattributes' => array(),
+        );
 
         // Get <a> tag attributes.
         $escapedmatch = preg_replace('/&(?!(?:apos|quot|[gl]t|amp);|#)/','&amp;',$matches[0]); // Escape any unescaped & characters.
