@@ -218,12 +218,55 @@ class filter_jwplayer_media extends core_media_player {
         if (count($sources) > 0) {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
-            $playlistitem = array('sources' => $sources);
             
-            $playlistitem['title'] = $this->get_name('', $urls);
+            // Process data-jwplayer attributes.
+            foreach ($options['htmlattributes'] as $attrib => $atval) {
+                if (strpos($attrib, 'data-jwplayer-') === 0) {  // treat attributes starting data-jwplayer as options.
+                    $opt = preg_replace('~^data-jwplayer-~', '', $attrib);
+                    $atval = trim((string) $atval);
+                    if (strpos($atval, ': ') || strpos($atval, '; ') || strpos($atval,', ')) {  // if attribute contains any of :;, it needs to be split to an array.
+                        $atvalarray = preg_split('~[,;] ~', $atval);
+                        $newatval = array();
+                        foreach ($atvalarray as $dataval) {
+                            $newdata = explode(': ', $dataval,2);
+                            if (count($newdata) > 1){
+                                $newdata[1] = trim($newdata[1]);
+                                if (filter_var($newdata[1], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                                    $newdata[1] = new moodle_url($newdata[1]);
+                                }
+                                $newatval[trim($newdata[0])] = $newdata[1];
+                            } else {
+                                $newdata[0] = trim($newdata[0]);
+                                if (filter_var($newdata[0], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                                    $newdata[0] = new moodle_url($newdata[0]);
+                                }
+                                $newatval[] = $newdata[0];
+                            }
+                        }
+                        $atval = $newatval;
+                    } else if (filter_var($atval, FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                        $atval = new moodle_url($atval);
+                    }
+                    $options[$opt] = $atval;
+                } else {
+                    // Pass any other global HTML attributes to the player span tag.
+                    $globalhtmlattributes = array('accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate');
+                    if (in_array($attrib, $globalhtmlattributes) || strpos($attrib, 'data-' === 0)) {
+                        $newattributes[$attrib] = $atval;  
+                    }
+                }
+            }
+            $playlistitem = array('sources' => $sources);
+
+            // Set Title from title attribute of a tag if it has one if not default to filename.
+            if (isset($options['htmlattributes']['title'])) {
+                $playlistitem['title'] = (string) $options['htmlattributes']['title'];
+            } else {
+                $playlistitem['title'] = $this->get_name('', $urls);
+            }
 
             // Setup poster image.
-            if (isset($options['image'])) {
+            if (isset($options['image']) && $options['image'] instanceof moodle_url) {
                 $playlistitem['image'] = urldecode($options['image']->out(false));
             } else if ($poster = get_config('filter_jwplayer', 'defaultposter')) {
                 $syscontext = context_system::instance();
@@ -234,10 +277,12 @@ class filter_jwplayer_media extends core_media_player {
             if (isset($options['subtitles'])) {
                 $tracks = array();
                 foreach ($options['subtitles'] as $label => $subtitlefileurl) {
-                    $tracks[] = array(
-                        'file' => urldecode($subtitlefileurl->out(false)),
-                        'label' => $label,
-                    );
+                    if ($subtitlefileurl instanceof moodle_url) {
+                        $tracks[] = array(
+                            'file' => urldecode($subtitlefileurl->out(false)),
+                            'label' => $label,
+                        );
+                    }
                 }
                 $playlistitem['tracks'] = $tracks;
             }
@@ -327,11 +372,18 @@ class filter_jwplayer_media extends core_media_player {
             );
 
             $this->setup();
+			
+            // Set required class for player span tag.
+            if (isset($options['htmlattributes']['class'])) {
+                $newattributes['class'] .= ' filter_jwplayer_media';
+            } else {
+                $newattributes['class'] = 'filter_jwplayer_media';
+            }
 
             $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
             $playerdiv = html_writer::tag('span', $this->get_name('', $urls), array('id' => $playerid));
             $outerspan = html_writer::tag('span', $playerdiv, $outerspanargs);
-            $output .= html_writer::tag('span', $outerspan, array('class' => 'filter_jwplayer_media'));
+            $output .= html_writer::tag('span', $outerspan, $newattributes);
         }
 
         return $output;

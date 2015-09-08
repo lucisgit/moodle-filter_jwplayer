@@ -95,15 +95,26 @@ class filter_jwplayer extends moodle_text_filter {
             return $matches[0];
         }
 
+        $options = array();
+		
         // Get name.
         $name = trim($matches[2]);
         if (empty($name) or strpos($name, 'http') === 0) {
             $name = ''; // Use default name.
         }
 
+        // Get <a> tag attributes.
+        $escapedmatch = preg_replace('/&(?!(?:apos|quot|[gl]t|amp);|#)/','&amp;',$matches[0]); // Escape any unescaped & characters.
+        $doc = new DOMDocument();
+        $doc->strictErrorChecking = FALSE;
+        $doc->loadHTML($escapedmatch);  // Load HTML as a DOMDocument.
+        if ($atag = simplexml_import_dom($doc)->body[0]->a[0]){  // Make sure xml is valid xml if not do nothing.
+            $options['htmlattributes'] = $atag->attributes();
+        }
+
         // Split provided URL into alternatives.
         $urls = filter_jwplayer_split_alternatives($matches[1], $width, $height);
-        $result = $this->renderer->embed_alternatives($urls, $name, $width, $height);
+        $result = $this->renderer->embed_alternatives($urls, $name, $width, $height, $options);
 
         // If something was embedded, return it, otherwise return original.
         if ($result !== '') {
