@@ -31,7 +31,7 @@ through installation process by loggining in as admin.
 
 The last step is to configure the filter. After the installation, the plugin
 configuration page will be shown (alternatively you may access it via Site
-Adminstration -> Plugins -> Filters). You need to specify whether you use
+Administration -> Plugins -> Filters). You need to specify whether you use
 self-hosted or cloud version of JW Player. In the latter case you would need to
 specify aditionally, whether player libraries will be accessed using secure
 connection (https) and the "Account token", which you may obtain from your
