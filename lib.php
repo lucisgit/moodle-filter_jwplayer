@@ -187,6 +187,7 @@ class filter_jwplayer_media extends core_media_player {
         $sources = array();
         $playersetupdata = array();
         $isstream = false;
+        $streams = array();
 
         foreach ($urls as $url) {
             // Add the details for this source.
@@ -202,20 +203,22 @@ class filter_jwplayer_media extends core_media_player {
             if ($url->get_scheme() === 'rtmp' || $ext === 'm3u8' || $ext === 'smil') {
                 // For RTMP, HLS and Dynamic RTMP we set rendering mode to Flash to
                 // ensure streams play is possible even when mp4 fallbacks are given.
-                // Also make sure that URL is the first in the list.
                 $playersetupdata['primary'] = 'flash';
-                array_unshift($sources, $source);
+                $streams[] = $source;
                 $isstream = true;
             } else {
                 $sources[] = $source;
             }
         }
 
+        // Make sure that stream URLs are at the start of the list.
+        $sources = array_merge($streams, $sources);
+
         if (count($sources) > 0) {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
             $playlistitem = array('sources' => $sources);
-            
+
             $playlistitem['title'] = $this->get_name('', $urls);
 
             // Setup poster image.
