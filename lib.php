@@ -187,6 +187,7 @@ class filter_jwplayer_media extends core_media_player {
         $sources = array();
         $playersetupdata = array();
         $isstream = false;
+        $streams = array();
 
         foreach ($urls as $url) {
             // Add the details for this source.
@@ -197,28 +198,31 @@ class filter_jwplayer_media extends core_media_player {
             $ext = core_media::get_extension($url);
             if ($ext === 'mov') {
                 $source['type'] = 'mp4';
-            } else if ($ext === 'mpd') {
+            }
+
+            if ($ext === 'mpd') {
                 // Dash variable needs to be set if we have a dash stream_bucket_append
                 $playersetupdata['dash'] = true;
                 $isstream = true;
-            }
-
-            if ($url->get_scheme() === 'rtmp' || $ext === 'm3u8' || $ext === 'smil') {
+                $streams[] = $source;
+            } else if ($url->get_scheme() === 'rtmp' || $ext === 'm3u8' || $ext === 'smil') {
                 // For RTMP, HLS and Dynamic RTMP we set rendering mode to Flash to
                 // ensure streams play is possible even when mp4 fallbacks are given.
-                // Also make sure that URL is the first in the list.
                 $playersetupdata['primary'] = 'flash';
-                array_unshift($sources, $source);
+                $streams[] = $source;
                 $isstream = true;
             } else {
                 $sources[] = $source;
             }
         }
 
+        // Make sure that stream URLs are at the start of the list.
+        $sources = array_merge($streams, $sources);
+
         if (count($sources) > 0) {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
-            
+
             // Process data-jwplayer attributes.
             foreach ($options['htmlattributes'] as $attrib => $atval) {
                 if (strpos($attrib, 'data-jwplayer-') === 0) {  // treat attributes starting data-jwplayer as options.
@@ -252,7 +256,7 @@ class filter_jwplayer_media extends core_media_player {
                     // Pass any other global HTML attributes to the player span tag.
                     $globalhtmlattributes = array('accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate');
                     if (in_array($attrib, $globalhtmlattributes) || strpos($attrib, 'data-' === 0)) {
-                        $newattributes[$attrib] = $atval;  
+                        $newattributes[$attrib] = $atval;
                     }
                 }
             }
@@ -372,7 +376,7 @@ class filter_jwplayer_media extends core_media_player {
             );
 
             $this->setup();
-			
+
             // Set required class for player span tag.
             if (isset($options['htmlattributes']['class'])) {
                 $newattributes['class'] .= ' filter_jwplayer_media';
