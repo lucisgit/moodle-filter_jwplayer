@@ -222,44 +222,47 @@ class filter_jwplayer_media extends core_media_player {
         if (count($sources) > 0) {
             $playerid = 'filter_jwplayer_media_' . html_writer::random_id();
 
-
             // Process data-jwplayer attributes.
-            foreach ($options['htmlattributes'] as $attrib => $atval) {
-                if (strpos($attrib, 'data-jwplayer-') === 0) {  // treat attributes starting data-jwplayer as options.
-                    $opt = preg_replace('~^data-jwplayer-~', '', $attrib);
-                    $atval = trim((string) $atval);
-                    if (strpos($atval, ': ') || strpos($atval, '; ') || strpos($atval,', ')) {  // if attribute contains any of :;, it needs to be split to an array.
-                        $atvalarray = preg_split('~[,;] ~', $atval);
-                        $newatval = array();
-                        foreach ($atvalarray as $dataval) {
-                            $newdata = explode(': ', $dataval,2);
-                            if (count($newdata) > 1){
-                                $newdata[1] = trim($newdata[1]);
-                                if (filter_var($newdata[1], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
-                                    $newdata[1] = new moodle_url($newdata[1]);
+            if (!empty($options['htmlattributes'])) {
+                foreach ($options['htmlattributes'] as $attrib => $atval) {
+                    if (strpos($attrib, 'data-jwplayer-') === 0) {  // treat attributes starting data-jwplayer as options.
+                        $opt = preg_replace('~^data-jwplayer-~', '', $attrib);
+                        $atval = trim((string) $atval);
+                        if (strpos($atval, ': ') || strpos($atval, '; ') || strpos($atval,', ')) {  // if attribute contains any of :;, it needs to be split to an array.
+                            $atvalarray = preg_split('~[,;] ~', $atval);
+                            $newatval = array();
+                            foreach ($atvalarray as $dataval) {
+                                $newdata = explode(': ', $dataval,2);
+                                if (count($newdata) > 1){
+                                    $newdata[1] = trim($newdata[1]);
+                                    if (filter_var($newdata[1], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                                        $newdata[1] = new moodle_url($newdata[1]);
+                                    }
+                                    $newatval[trim($newdata[0])] = $newdata[1];
+                                } else {
+                                    $newdata[0] = trim($newdata[0]);
+                                    if (filter_var($newdata[0], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                                        $newdata[0] = new moodle_url($newdata[0]);
+                                    }
+                                    $newatval[] = $newdata[0];
                                 }
-                                $newatval[trim($newdata[0])] = $newdata[1];
-                            } else {
-                                $newdata[0] = trim($newdata[0]);
-                                if (filter_var($newdata[0], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
-                                    $newdata[0] = new moodle_url($newdata[0]);
-                                }
-                                $newatval[] = $newdata[0];
                             }
+                            $atval = $newatval;
+                        } else if (filter_var($atval, FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                            $atval = new moodle_url($atval);
                         }
-                        $atval = $newatval;
-                    } else if (filter_var($atval, FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
-                        $atval = new moodle_url($atval);
-                    }
-                    $options[$opt] = $atval;
-                } else {
-                    // Pass any other global HTML attributes to the player span tag.
-                    $globalhtmlattributes = array('accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate');
-                    if (in_array($attrib, $globalhtmlattributes) || strpos($attrib, 'data-' === 0)) {
-                        $newattributes[$attrib] = $atval;
+                        $options[$opt] = $atval;
+                    } else {
+                        // Pass any other global HTML attributes to the player span tag.
+                        $globalhtmlattributes = array('accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate');
+                        if (in_array($attrib, $globalhtmlattributes) || strpos($attrib, 'data-' === 0)) {
+                            $newattributes[$attrib] = $atval;
+                        }
                     }
                 }
             }
+
+            // Set up playlist.
             $playlistitem = array('sources' => $sources);
 
             // Set Title from title attribute of a tag if it has one if not default to filename.

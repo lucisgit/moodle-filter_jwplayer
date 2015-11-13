@@ -102,9 +102,7 @@ class filter_jwplayer extends moodle_text_filter {
         }
 
         // Prepare options.
-        $options = array(
-            'htmlattributes' => array(),
-        );
+        $options = array();
 
         // Get <a> tag attributes.
         $escapedmatch = preg_replace('/&(?!(?:apos|quot|[gl]t|amp);|#)/','&amp;',$matches[0]); // Escape any unescaped & characters.
