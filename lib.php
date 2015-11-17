@@ -269,6 +269,17 @@ class filter_jwplayer_media extends core_media_player {
                 $playlistitem['title'] = $this->get_name('', $urls);
             }
 
+            // Setup video description.
+            if (isset($options['description'])) {
+                $playlistitem['description'] = $options['description'];
+            }
+
+            // Setup video mediaid and use this for the playerid.
+            if (isset($options['mediaid']) && strlen(trim($options['mediaid']))) {
+                $playlistitem['mediaid'] = $options['mediaid'];
+                $playerid = 'filter_jwplayer_media_' . preg_replace('/\s+/', '', $options['mediaid']);
+            }
+
             // Setup poster image.
             if (isset($options['image']) && $options['image'] instanceof moodle_url) {
                 $playlistitem['image'] = urldecode($options['image']->out(false));
@@ -292,6 +303,14 @@ class filter_jwplayer_media extends core_media_player {
             }
 
             $playersetupdata['playlist'] = array($playlistitem);
+
+            // If width and/or height are set in the options override those from URL or defaults.
+            if (isset($options['width'])) {
+                $width = $options['width'];
+            }
+            if (isset($options['height'])) {
+                $height = $options['height'];
+            }
 
             // If we are dealing with audio, show just the control bar.
             if (mimeinfo('string', $sources[0]['file']) === 'audio') {
@@ -336,11 +355,39 @@ class filter_jwplayer_media extends core_media_player {
                 if (is_numeric($width)) {
                     // If width is numeric calculate height from default aspect ratio.
                     $playersetupdata['height'] = round($width * FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H / FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W);
+                } else if(isset($options['aspectratio'])) {
+                    // Responsive videos need aspect ratio set to automatically set height, if this is set in $options use that.
+                        $playersetupdata['aspectratio'] = $options['aspectratio'];
                 } else {
-                // Responsive videos need aspect ratio set to automatically set height.
-                $playersetupdata['aspectratio'] = FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W.":".FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H;
+                    //  Use default aspectration
+                    $playersetupdata['aspectratio'] = FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W.":".FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H;
                 }
             }
+
+            //  Set additional player options: autostart, mute, controls, repeat, hlslabels, androidhls, primary.
+            if (isset($options['autostart'])) {
+                $playersetupdata['autostart'] = $options['autostart'];
+            }
+            if (isset($options['mute'])) {
+                $playersetupdata['mute'] = $options['mute'];
+            }
+            if (isset($options['controls'])) {
+                $playersetupdata['controls'] = $options['controls'];
+            }
+            if (isset($options['repeat'])) {
+                $playersetupdata['repeat'] = $options['repeat'];
+            }
+            if (isset($options['hlslabels']) && is_array($options['hlslabels'])) {
+                $playersetupdata['hlslabels'] = $options['hlslabels'];
+            }
+            if (isset($options['androidhls'])) {
+                $playersetupdata['androidhls'] = $options['androidhls'];
+            }
+            if (isset($options['primary'])) {
+                // if primary is set in $options then this will override all defaults including those for streams set above.
+                $playersetupdata['primary'] = $options['primary'];
+            }
+
 
             // Load skin.
             if ($customskincss = get_config('filter_jwplayer', 'customskincss')) {
