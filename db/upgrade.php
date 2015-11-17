@@ -15,18 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * JWplayer filter
+ * JW Player media filtering upgrade routines.
  *
  * @package    filter
  * @subpackage jwplayer
- * @copyright  2014 Ruslan Kabalin, Lancaster University
+ * @copyright  2015 Ruslan Kabalin, Lancaster University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * @param int $oldversion the version we are upgrading from
+ * @return bool result
+ */
+function xmldb_filter_jwplayer_upgrade($oldversion) {
+    global $CFG, $DB;
 
-$plugin->version   = 2015080401;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2013111800;        // Requires Moodle 2.6
-$plugin->component = 'filter_jwplayer'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release   = '0.3 for Moodle 2.6+ and JW Player 6';
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2015080401) {
+        // Delete customskin file, as the setting has been removed.
+        $fs = get_file_storage();
+        $fs->delete_area_files(context_system::instance()->id, 'filter_jwplayer', 'playerskin', 0);
+        unset_config('customskin', 'filter_jwplayer');
+
+        // Unset other removed settings.
+        unset_config('gatrackingobject', 'filter_jwplayer');
+
+        upgrade_plugin_savepoint(true, 2015080401, 'filter', 'jwplayer');
+    }
+    return true;
+}
