@@ -357,9 +357,23 @@ class filter_jwplayer_media extends core_media_player {
                 );
             }
 
+            // Set Google Analytics settings if enabled.
             if (get_config('filter_jwplayer', 'googleanalytics')) {
+                if (isset($options['gaidstring'])) {
+                    $gaidstring = $options['gaidstring'];
+                } else {
+                    $gaidstring = get_config('filter_jwplayer', 'gaidstring');
+                }
+
+                if (isset($options['galabel'])) {
+                    $galabel = $options['galabel'];
+                } else {
+                    $galabel = get_config('filter_jwplayer', 'galabel');
+                }
+
                 $playersetupdata['ga'] = array(
-                    'trackingobject' => get_config('filter_jwplayer', 'gatrackingobject'),
+                    'idstring' => $gaidstring,
+                    'label' => $galabel
                 );
             }
 

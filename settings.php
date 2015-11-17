@@ -89,7 +89,7 @@ if ($ADMIN->fulltree) {
             get_string('downloadbutton', 'filter_jwplayer'),
             get_string('downloadbuttondesc', 'filter_jwplayer'),
             0));
-            
+
     // Display Style (Fixed Width or Responsive).
     $displaystylechoice = array(
         'fixed' => get_string('displayfixed', 'filter_jwplayer'),
@@ -118,9 +118,14 @@ if ($ADMIN->fulltree) {
             get_string('googleanalytics', 'filter_jwplayer'),
             get_string('googleanalyticsdesc', 'filter_jwplayer'),
             0));
-			
-    $settings->add(new admin_setting_configtext('filter_jwplayer/gatrackingobject',
-            get_string('gatrackingobject', 'filter_jwplayer'),
-            get_string('gatrackingobjectdesc', 'filter_jwplayer'),
-            '_gaq'));
+
+    $settings->add(new admin_setting_configtext('filter_jwplayer/gaidstring',
+            get_string('gaidstring', 'filter_jwplayer'),
+            get_string('gaidstringdesc', 'filter_jwplayer'),
+            'file'));
+
+    $settings->add(new admin_setting_configtext('filter_jwplayer/galabel',
+            get_string('galabel', 'filter_jwplayer'),
+            get_string('galabeldesc', 'filter_jwplayer'),
+            'file'));
 }

@@ -40,8 +40,10 @@ $string['enabledextensionsdesc'] = 'Only selected file extensions will be handle
 $string['errornoaccounttoken'] = 'Cloud-hosted player requires account token';
 $string['errornojwplayerinstalled'] = 'No JW player files found in Moodle';
 $string['filtername'] = 'JW Player multimedia filter';
-$string['gatrackingobject'] = 'Google Analytics Tracking Object';
-$string['gatrackingobjectdesc'] = 'If you have changed the name of tracking object variable used by Google Analytics, set this here.  In most cases the default _gaq should be correct.';
+$string['gaidstring'] = 'Play/Complete Action';
+$string['gaidstringdesc'] = 'Action to record in Google Analytics for Play/Complete Events (e.g. file or title).  See the of ga.idstring setting on <a href="http://support.jwplayer.com/customer/portal/articles/1417179-integration-with-google-analytics">JWPlayer</a> website for more details.';
+$string['galabel'] = 'Other Event Action';
+$string['galabeldesc'] = 'Label to record in Google Analytics for player Events (e.g. file or title).  See the of ga.label setting on <a href="http://support.jwplayer.com/customer/portal/articles/1417179-integration-with-google-analytics">JWPlayer</a> website for more details.';
 $string['googleanalytics'] = 'Google Analytics Integration';
 $string['googleanalyticsdesc'] = 'Enable integration with Google Analytics.  Requires Google Analytics code to already be added to pages.  See details on the <a href="http://support.jwplayer.com/customer/portal/articles/1417179-integration-with-google-analytics">JW player website</a> for more information.';
 $string['hostingmethod'] = 'Player hosting method';
