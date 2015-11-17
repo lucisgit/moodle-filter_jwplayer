@@ -185,9 +185,8 @@ class filter_jwplayer_media extends core_media_player {
         $output = '';
 
         $sources = array();
-        $playersetupdata = array();
-        $isstream = false;
         $streams = array();
+        $playersetupdata = array();
 
         foreach ($urls as $url) {
             // Add the details for this source.
@@ -203,14 +202,12 @@ class filter_jwplayer_media extends core_media_player {
             if ($ext === 'mpd') {
                 // Dash variable needs to be set if we have a dash stream_bucket_append
                 $playersetupdata['dash'] = true;
-                $isstream = true;
                 $streams[] = $source;
             } else if ($url->get_scheme() === 'rtmp' || $ext === 'm3u8' || $ext === 'smil') {
                 // For RTMP, HLS and Dynamic RTMP we set rendering mode to Flash to
                 // ensure streams play is possible even when mp4 fallbacks are given.
                 $playersetupdata['primary'] = 'flash';
                 $streams[] = $source;
-                $isstream = true;
             } else {
                 $sources[] = $source;
             }
@@ -353,7 +350,7 @@ class filter_jwplayer_media extends core_media_player {
             }
 
             $downloadbtn = null;
-            if (get_config('filter_jwplayer', 'downloadbutton') && !$isstream) {
+            if (get_config('filter_jwplayer', 'downloadbutton') && !count($streams)) {
                 $downloadbtn = array(
                     'img' => $CFG->wwwroot.'/filter/jwplayer/img/download.png',
                     'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer'),
