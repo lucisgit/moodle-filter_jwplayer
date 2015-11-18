@@ -124,4 +124,14 @@ class filter_jwplayer extends moodle_text_filter {
             return $matches[0];
         }
     }
+
+    /**
+     * Setup filter requirements.
+     *
+     * @param moodle_page $page the page we are going to add requirements to.
+     * @param context $context the context which contents are going to be filtered.
+     */
+    public function setup($page, $context) {
+        filter_jwplayer_setup($page);
+    }
 }
