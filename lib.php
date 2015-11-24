@@ -561,13 +561,14 @@ class filter_jwplayer_media extends core_media_player {
         global $CFG;
         $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
         $accounttoken = get_config('filter_jwplayer', 'accounttoken');
+        $licensekey = get_config('filter_jwplayer', 'licensekey');
         if (($hostingmethod === 'cloud') && empty($accounttoken)) {
             // Cloud mode, but no account token is provided.
             return false;
         }
         $hostedjwplayerpath = $CFG->libdir . '/jwplayer/jwplayer.js';
-        if (($hostingmethod === 'self') && !is_readable($hostedjwplayerpath)) {
-            // Self-hosted mode, but no jwplayer files.
+        if (($hostingmethod === 'self') && (!is_readable($hostedjwplayerpath) || empty($licensekey))) {
+            // Self-hosted mode, but no jwplayer files and no license.
             return false;
         }
         return true;

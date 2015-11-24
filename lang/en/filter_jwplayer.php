@@ -39,6 +39,7 @@ $string['enabledextensions'] = 'Enabled extensions';
 $string['enabledextensionsdesc'] = 'Only selected file extensions will be handled by the filter. Note HLS (.m3u8) and MPEG-Dash (.mpd) require a Premium, Enterprise or Ads licence for the player.';
 $string['errornoaccounttoken'] = 'Cloud-hosted player requires account token';
 $string['errornojwplayerinstalled'] = 'No JW player files found in Moodle';
+$string['errornolicensekey'] = 'Self-hosted player requires license key';
 $string['eventmedia_audiotrack_switched'] = 'Media audio track switched';
 $string['eventmedia_captions_switched'] = 'Media caption track switched';
 $string['eventmedia_playback_completed'] = 'Media playback completed';

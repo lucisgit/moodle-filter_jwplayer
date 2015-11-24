@@ -53,7 +53,7 @@ if ($ADMIN->fulltree) {
             ''));
 
     // License key.
-    $settings->add(new admin_setting_configtext('filter_jwplayer/licensekey',
+    $settings->add(new filter_jwplayer_license_setting('filter_jwplayer/licensekey',
             get_string('licensekey', 'filter_jwplayer'),
             get_string('licensekeydesc', 'filter_jwplayer'),
             ''));
