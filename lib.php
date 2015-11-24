@@ -133,12 +133,17 @@ function filter_jwplayer_setup($page) {
             $page->requires->js($jwplayer, false);
         }
     } else if ($hostingmethod === 'self') {
-        $jwplayer = new moodle_url('/lib/jwplayer/jwplayer.js');
-        $page->requires->js($jwplayer);
+        // First, we need to define jwplayer, since jwplayer doesn't
+        // define a module for require.js, we need to do that ourselves in most
+        // simple way, so that end user's job will be just to unpack jwplayer
+        // self-hosted archive in ./lib/jwplayer/ directory.
+        $jwplayer = new moodle_url('/lib/jwplayer/jwplayer');
+        $requirejs = 'require.config({ paths: {\'jwplayer\': \'' . $jwplayer->out() . '\'}})';
+        $page->requires->js_amd_inline($requirejs);
 
-        if ($licensekey = get_config('filter_jwplayer', 'licensekey')) {
-            $page->requires->js_init_code("jwplayer.key='" . $licensekey . "';", true);
-        }
+        // Init player with the license key.
+        $licensekey = get_config('filter_jwplayer', 'licensekey');
+        $page->requires->js_call_amd('filter_jwplayer/jwplayer', 'init', array($licensekey));
     }
 }
 
@@ -448,15 +453,12 @@ class filter_jwplayer_media extends core_media_player {
                 );
             }
 
+            $playersetup = new stdClass();
+            $playersetup->playerid = $playerid;
+            $playersetup->setupdata = $playersetupdata;
+            $playersetup->downloadbtn = $downloadbtn;
             // Pass the page context variables for logging
-            $logcontext = $PAGE->context->id;
-
-            $playersetup = array(
-                'playerid' => $playerid,
-                'setupdata' => $playersetupdata,
-                'downloadbtn' => $downloadbtn,
-                'logcontext' => $logcontext
-            );
+            $playersetup->logcontext = $PAGE->context->id;
 
             // Set required class for player span tag.
             if (isset($options['htmlattributes']['class'])) {
@@ -466,11 +468,7 @@ class filter_jwplayer_media extends core_media_player {
             }
 
             // Set up the player.
-            $jsmodule = array(
-                'name' => $playerid,
-                'fullpath' => '/filter/jwplayer/module.js',
-            );
-            $PAGE->requires->js_init_call('M.filter_jwplayer.init', $playersetup, true, $jsmodule);
+            $PAGE->requires->js_call_amd('filter_jwplayer/jwplayer', 'setupPlayer', array($playersetup));
             $playerdiv = html_writer::tag('span', $this->get_name('', $urls), array('id' => $playerid));
             $outerspan = html_writer::tag('span', $playerdiv, $outerspanargs);
             $output .= html_writer::tag('span', $outerspan, $newattributes);
