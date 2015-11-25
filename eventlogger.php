@@ -137,8 +137,7 @@ if ($event->{'type'} == 'setupError' || $event->{'type'} == 'error') {
         $other{'width'} = $event->{'level'}->{'width'};
         $other{'height'} = $event->{'level'}->{'height'};
         $other{'bitrate'} = $event->{'level'}->{'bitrate'};
-    }
-    else {
+    } else {
         $other{'hls'} = false;
         $other{'level'} = $quality[$event->{'currentQuality'}]->{'label'};
         $other{'mode'} = '';
