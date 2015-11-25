@@ -43,5 +43,13 @@ function xmldb_filter_jwplayer_upgrade($oldversion) {
 
         upgrade_plugin_savepoint(true, 2015080401, 'filter', 'jwplayer');
     }
+
+    if ($oldversion < 2015112500) {
+        // Unset removed settings.
+        unset_config('securehosting', 'filter_jwplayer');
+        unset_config('accounttoken', 'filter_jwplayer');
+
+        upgrade_plugin_savepoint(true, 2015112500, 'filter', 'jwplayer');
+    }
     return true;
 }

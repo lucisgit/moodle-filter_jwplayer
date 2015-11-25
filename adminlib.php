@@ -69,40 +69,6 @@ class filter_jwplayer_hostingmethod_setting extends admin_setting_configselect {
     }
 }
 
-
-/**
- * Admin setting for account token, adds verification.
- *
- * @package    filter
- * @subpackage jwplayer
- * @copyright  2014 Ruslan Kabalin, Lancaster University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class filter_jwplayer_accounttoken_setting extends admin_setting_configtext {
-
-    /**
-     * Validate data.
-     *
-     * This ensures that account token is specified if cloud-hosted player is
-     * selected.
-     *
-     * @param string $data
-     * @return mixed True on success, else error message.
-     */
-    public function validate($data) {
-        $result = parent::validate($data);
-        if ($result !== true) {
-            return $result;
-        }
-
-        $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
-        if ($hostingmethod === 'cloud' && empty($data)) {
-            return get_string('errornoaccounttoken', 'filter_jwplayer');
-        }
-        return true;
-    }
-}
-
 /**
  * Admin setting for license, adds verification.
  *
@@ -116,8 +82,7 @@ class filter_jwplayer_license_setting extends admin_setting_configtext {
     /**
      * Validate data.
      *
-     * This ensures that license key is specified if self-hosted player is
-     * selected.
+     * This ensures that license key is specified for any hosting mode.
      *
      * @param string $data
      * @return mixed True on success, else error message.
@@ -128,8 +93,7 @@ class filter_jwplayer_license_setting extends admin_setting_configtext {
             return $result;
         }
 
-        $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
-        if ($hostingmethod === 'self' && empty($data)) {
+        if (empty($data)) {
             return get_string('errornolicensekey', 'filter_jwplayer');
         }
         return true;

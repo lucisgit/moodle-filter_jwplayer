@@ -23,8 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['accounttoken'] = 'Cloud-hosted player account token';
-$string['accounttokendesc'] = 'Cloud-hosted player account token from account settings page on <a href="https://account.jwplayer.com/#/account">JW player website</a>. This is the file name from cloud-hosted player code, e.g. for script path http://jwpsrv.com/library/ABCDEF012345.js the corresponding account token that needs to be entered in the field above is ABCDEF012345. Not required if self-hosted player is used.';
 $string['customskincss'] = 'Custom CSS skin name';
 $string['customskincssdesc'] = 'Use a custom CSS skin.  Styles should be added to the site css as described in <a href="http://support.jwplayer.com/customer/portal/articles/1412123-building-jw-player-skins">JWPlayer website</a>.';
 $string['downloadbutton'] = 'Download button';
@@ -37,7 +35,6 @@ $string['displayfixed'] = 'Fixed Width';
 $string['displayresponsive'] = 'Responsive';
 $string['enabledextensions'] = 'Enabled extensions';
 $string['enabledextensionsdesc'] = 'Only selected file extensions will be handled by the filter. Note HLS (.m3u8) and MPEG-Dash (.mpd) require a Premium, Enterprise or Ads licence for the player.';
-$string['errornoaccounttoken'] = 'Cloud-hosted player requires account token';
 $string['errornojwplayerinstalled'] = 'No JW player files found in Moodle';
 $string['errornolicensekey'] = 'Self-hosted player requires license key';
 $string['eventmedia_audiotrack_switched'] = 'Media audio track switched';
@@ -58,14 +55,12 @@ $string['googleanalytics'] = 'Google Analytics Integration';
 $string['googleanalyticsdesc'] = 'Enable integration with Google Analytics.  Requires Google Analytics code to already be added to pages.  See details on the <a href="http://support.jwplayer.com/customer/portal/articles/1417179-integration-with-google-analytics">JW player website</a> for more information.';
 $string['hostingmethod'] = 'Player hosting method';
 $string['hostingmethodcloud'] = 'Cloud-hosted';
-$string['hostingmethoddesc'] = 'Cloud hosted JW player is used by default. If you prefer self-hosted option, make sure you downloaded JW player files and placed them in /lib/jwplayer/ directory in Moodle.';
+$string['hostingmethoddesc'] = 'Cloud hosted JW player is used by default. Notice, that this cloud-hosted mode has nothing to do with <a href="http://www.jwplayer.com/products/jwplayer/cloud-video-player/">cloud video player</a> concept described on JW Player website. Cloud-hosting mode just loads JW Player libraries from their CDN hosting as opposed to specific Moodle directory like in self-hosted mode. If you prefer self-hosted option, make sure you downloaded JW Player 7 (Self-Hosted) zip archive from <a href="https://dashboard.jwplayer.com/#/players/downloads">License Keys & Downloads</a> page on JW player website, unpacked it and placed content in /lib/jwplayer/ directory in Moodle.';
 $string['hostingmethodself'] = 'Self-hosted';
-$string['licensekey'] = 'Self-hosted player license key';
-$string['licensekeydesc'] = 'Self-hosted player license key from account settings page on <a href="https://account.jwplayer.com/#/account">JW player website</a>.';
+$string['licensekey'] = 'Player license key';
+$string['licensekeydesc'] = 'Player license key from <a href="https://dashboard.jwplayer.com/#/players/downloads">License Keys & Downloads</a> page on JW player website. Specify here a key for "JW Player 7 (Self-Hosted)", even if you are using cloud-hosted hosting method in the settings above.';
 $string['paideditionsconfig'] = 'Settings for paid editions of JW Player';
 $string['paideditionsconfigdescr'] = 'Settings below only work with Pro, Premium and Ads editions. They have no effect for free edition.';
-$string['securehosting'] = 'HTTPS for cloud-hosted player';
-$string['securehostingdesc'] = 'Use https for cloud-hosted player.';
 $string['standardskin'] = 'standard';
 $string['supportrtmp'] = 'Support RTMP streams';
 $string['supportrtmpdesc'] = 'If enabled, links that start with rtmp:// will be handled by filter, irrespective of whether its extension is enabled in the supported extensions setting.';

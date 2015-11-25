@@ -40,18 +40,6 @@ if ($ADMIN->fulltree) {
             get_string('hostingmethoddesc', 'filter_jwplayer'),
             'cloud', $hostingmethodchoice));
 
-    // Use HTTPS for cloud hosting.
-    $settings->add(new admin_setting_configcheckbox('filter_jwplayer/securehosting',
-            get_string('securehosting', 'filter_jwplayer'),
-            get_string('securehostingdesc', 'filter_jwplayer'),
-            0));
-
-    // Account token.
-    $settings->add(new filter_jwplayer_accounttoken_setting('filter_jwplayer/accounttoken',
-            get_string('accounttoken', 'filter_jwplayer'),
-            get_string('accounttokendesc', 'filter_jwplayer'),
-            ''));
-
     // License key.
     $settings->add(new filter_jwplayer_license_setting('filter_jwplayer/licensekey',
             get_string('licensekey', 'filter_jwplayer'),

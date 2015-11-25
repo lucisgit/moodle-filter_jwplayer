@@ -126,25 +126,22 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
 function filter_jwplayer_setup($page) {
     $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
     if ($hostingmethod === 'cloud') {
-        $proto = (get_config('filter_jwplayer', 'securehosting')) ? 'https' : 'http';
-        // For cloud-hosted player account token is required.
-        if ($accounttoken = get_config('filter_jwplayer', 'accounttoken')) {
-            $jwplayer = new moodle_url( $proto . '://jwpsrv.com/library/' . $accounttoken . '.js');
-            $page->requires->js($jwplayer, false);
-        }
+        // Well, this is not really a "cloud" version any more, we are just
+        // using jwplayer libraries hosted on JW Player CDN.
+        $jwplayer = new moodle_url('https://ssl.p.jwpcdn.com/player/v/7.2.2/jwplayer');
     } else if ($hostingmethod === 'self') {
-        // First, we need to define jwplayer, since jwplayer doesn't
-        // define a module for require.js, we need to do that ourselves in most
-        // simple way, so that end user's job will be just to unpack jwplayer
-        // self-hosted archive in ./lib/jwplayer/ directory.
+        // For self-hosted option, we are looking for player files presence in
+        // ./lib/jwplayer/ directory.
         $jwplayer = new moodle_url('/lib/jwplayer/jwplayer');
-        $requirejs = 'require.config({ paths: {\'jwplayer\': \'' . $jwplayer->out() . '\'}})';
-        $page->requires->js_amd_inline($requirejs);
-
-        // Init player with the license key.
-        $licensekey = get_config('filter_jwplayer', 'licensekey');
-        $page->requires->js_call_amd('filter_jwplayer/jwplayer', 'init', array($licensekey));
     }
+    // We need to define jwplayer, since jwplayer doesn't
+    // define a module for require.js.
+    $requirejs = 'require.config({ paths: {\'jwplayer\': \'' . $jwplayer->out() . '\'}})';
+    $page->requires->js_amd_inline($requirejs);
+
+    // Init player with the license key.
+    $licensekey = get_config('filter_jwplayer', 'licensekey');
+    $page->requires->js_call_amd('filter_jwplayer/jwplayer', 'init', array($licensekey));
 }
 
 function filter_jwplayer_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
@@ -560,15 +557,14 @@ class filter_jwplayer_media extends core_media_player {
     public function is_enabled() {
         global $CFG;
         $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
-        $accounttoken = get_config('filter_jwplayer', 'accounttoken');
         $licensekey = get_config('filter_jwplayer', 'licensekey');
-        if (($hostingmethod === 'cloud') && empty($accounttoken)) {
-            // Cloud mode, but no account token is provided.
+        if (($hostingmethod === 'cloud') && empty($licensekey)) {
+            // Cloud mode, but no license key.
             return false;
         }
         $hostedjwplayerpath = $CFG->libdir . '/jwplayer/jwplayer.js';
         if (($hostingmethod === 'self') && (!is_readable($hostedjwplayerpath) || empty($licensekey))) {
-            // Self-hosted mode, but no jwplayer files and no license.
+            // Self-hosted mode, but no jwplayer files and/or no license.
             return false;
         }
         return true;
