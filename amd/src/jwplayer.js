@@ -22,13 +22,13 @@
  * @copyright  2015 Ruslan Kabalin, Lancaster University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jwplayer', 'core/config', 'core/yui'], function(jwplayer, mdlconfig, Y) {
+define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, mdlconfig, Y, log) {
     // Private functions and variables.
     /** @var {int} logcontext Moodle page context id. */
     var logcontext = null;
 
     /**
-     * Event loggining. Called when player event is triggered.
+     * Event logging. Called when player event is triggered.
      *
      * @method logevent
      * @private
@@ -46,6 +46,11 @@ define(['jwplayer', 'core/config', 'core/yui'], function(jwplayer, mdlconfig, Y)
                 'file': playerinstance.getPlaylistItem().file,
                 'position': playerinstance.getPosition(),
                 'bitrate': playerinstance.getCurrentQuality().bitrate,
+            },
+            on: {
+                failure: function(o) {
+                    log.error(o);
+		}
             }
         };
 
@@ -68,6 +73,18 @@ define(['jwplayer', 'core/config', 'core/yui'], function(jwplayer, mdlconfig, Y)
         }
 
         Y.io(mdlconfig.wwwroot + '/filter/jwplayer/eventlogger.php', config);
+    }
+
+    /**
+     * Error logging. Called when player error event is triggered.
+     *
+     * @method logevent
+     * @private
+     * @param {Object[]} event JW Player event.
+     */
+    var logerror = function(event) {
+        var errormsg = this.getPlaylistItem().title + ' ' + event.type + ': '+ event.message;
+        log.error(errormsg);
     }
 
     return {
@@ -103,6 +120,10 @@ define(['jwplayer', 'core/config', 'core/yui'], function(jwplayer, mdlconfig, Y)
                     window.location.href = playerinstance.getPlaylistItem().file + '?forcedownload=true';
                 }, "download");
             }
+
+            // Track errors and log them.
+            playerinstance.on('setupError', logerror);
+            playerinstance.on('error', logerror);
 
             // Track events and log them.
             playerinstance.on('playAttempt', logevent);
