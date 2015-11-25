@@ -37,7 +37,7 @@ if ($ADMIN->fulltree) {
     );
     $settings->add(new filter_jwplayer_hostingmethod_setting('filter_jwplayer/hostingmethod',
             get_string('hostingmethod', 'filter_jwplayer'),
-            get_string('hostingmethoddesc', 'filter_jwplayer'),
+            get_string('hostingmethoddesc', 'filter_jwplayer', FILTER_JWPLAYER_CLOUD_VERSION),
             'cloud', $hostingmethodchoice));
 
     // License key.

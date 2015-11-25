@@ -26,6 +26,13 @@
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/medialib.php');
 
+/** Current version of cloud-hosted JW Player. */
+if (!defined('FILTER_JWPLAYER_CLOUD_VERSION')) {
+    // This is the only place where version needs to be changed in case of new
+    // release avialability.
+    define('FILTER_JWPLAYER_CLOUD_VERSION', '7.2.2');
+}
+/** Size and aspect ratio related defaults. */
 if (!defined('FILTER_JWPLAYER_VIDEO_WIDTH')) {
     // Default video width if no width is specified.
     // May be defined in config.php if required.
@@ -128,7 +135,7 @@ function filter_jwplayer_setup($page) {
     if ($hostingmethod === 'cloud') {
         // Well, this is not really a "cloud" version any more, we are just
         // using jwplayer libraries hosted on JW Player CDN.
-        $jwplayer = new moodle_url('https://ssl.p.jwpcdn.com/player/v/7.2.2/jwplayer');
+        $jwplayer = new moodle_url('https://ssl.p.jwpcdn.com/player/v/' . FILTER_JWPLAYER_CLOUD_VERSION . '/jwplayer');
     } else if ($hostingmethod === 'self') {
         // For self-hosted option, we are looking for player files presence in
         // ./lib/jwplayer/ directory.
