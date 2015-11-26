@@ -32,20 +32,16 @@ function xmldb_filter_jwplayer_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2015080401) {
+    if ($oldversion < 2015112500) {
         // Delete customskin file, as the setting has been removed.
-        $fs = get_file_storage();
-        $fs->delete_area_files(context_system::instance()->id, 'filter_jwplayer', 'playerskin', 0);
-        unset_config('customskin', 'filter_jwplayer');
+        if (get_config('filter_jwplayer', 'customskin') !== false) {
+            $fs = get_file_storage();
+            $fs->delete_area_files(context_system::instance()->id, 'filter_jwplayer', 'playerskin', 0);
+            unset_config('customskin', 'filter_jwplayer');
+        }
 
         // Unset other removed settings.
         unset_config('gatrackingobject', 'filter_jwplayer');
-
-        upgrade_plugin_savepoint(true, 2015080401, 'filter', 'jwplayer');
-    }
-
-    if ($oldversion < 2015112500) {
-        // Unset removed settings.
         unset_config('securehosting', 'filter_jwplayer');
         unset_config('accounttoken', 'filter_jwplayer');
 
