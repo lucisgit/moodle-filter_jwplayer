@@ -62,6 +62,10 @@ if ($ADMIN->fulltree) {
             get_string('supportrtmpdesc', 'filter_jwplayer'),
             0));
 
+    // Appearance related settings.
+    $settings->add(new admin_setting_heading('appearanceconfig',
+            get_string('appearanceconfig', 'filter_jwplayer'), ''));
+
     // Default Poster Image.
     $settings->add(new admin_setting_configstoredfile('filter_jwplayer/defaultposter',
             get_string('defaultposter', 'filter_jwplayer'),
@@ -101,10 +105,15 @@ if ($ADMIN->fulltree) {
             get_string('customskincssdesc', 'filter_jwplayer'),
             ''));
 
-    // Google Analytics support.
+    // Google Analytics settings.
+    $settings->add(new admin_setting_heading('googleanalyticsconfig',
+            get_string('googleanalyticsconfig', 'filter_jwplayer'),
+            get_string('googleanalyticsconfigdesc', 'filter_jwplayer')));
+
+    $addhtml = new moodle_url('/admin/settings.php', array('section' => 'additionalhtml'));
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/googleanalytics',
             get_string('googleanalytics', 'filter_jwplayer'),
-            get_string('googleanalyticsdesc', 'filter_jwplayer'),
+            get_string('googleanalyticsdesc', 'filter_jwplayer', $addhtml->out()),
             0));
 
     $settings->add(new admin_setting_configtext('filter_jwplayer/gaidstring',
