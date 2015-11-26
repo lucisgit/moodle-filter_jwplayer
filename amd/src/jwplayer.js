@@ -72,6 +72,7 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
             config.data.captions = JSON.stringify(playerinstance.getCaptionsList());
         }
 
+        //log.debug(config.data);
         Y.io(mdlconfig.wwwroot + '/filter/jwplayer/eventlogger.php', config);
     }
 
@@ -109,6 +110,7 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
          * @param {Object[]} playersetup JW Player setup parameters.
          */
         setupPlayer: function (playersetup) {
+            //log.debug(playersetup);
             logcontext = playersetup.logcontext;
             var playerinstance = jwplayer(playersetup.playerid);
             playerinstance.setup(playersetup.setupdata);
@@ -121,24 +123,14 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
                 }, "download");
             }
 
-            // Track errors and log them.
+            // Track errors and log them in browser console.
             playerinstance.on('setupError', logerror);
             playerinstance.on('error', logerror);
 
-            // Track events and log them.
-            playerinstance.on('playAttempt', logevent);
-            playerinstance.on('play', logevent);
-            playerinstance.on('buffer', logevent);
-            playerinstance.on('pause', logevent);
-            playerinstance.on('idle', logevent);
-            playerinstance.on('complete', logevent);
-            playerinstance.on('error', logevent);
-            playerinstance.on('setupError', logevent);
-            playerinstance.on('seek', logevent);
-            playerinstance.on('visualQuality', logevent);
-            playerinstance.on('levelsChanged', logevent);
-            playerinstance.on('audioTrackChanged', logevent);
-            playerinstance.on('captionsChanged', logevent);
+            // Track required events and log them in Moodle.
+            playersetup.logevents.forEach(function (eventname) {
+                playerinstance.on(eventname, logevent);
+            });
         }
     };
 });

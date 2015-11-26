@@ -388,7 +388,7 @@ class filter_jwplayer_media extends core_media_player {
                 if (is_numeric($width)) {
                     // If width is numeric calculate height from default aspect ratio.
                     $playersetupdata['height'] = round($width * FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H / FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W);
-                } else if(isset($options['aspectratio'])) {
+                } else if (isset($options['aspectratio'])) {
                     // Responsive videos need aspect ratio set to automatically set height, if this is set in $options use that.
                         $playersetupdata['aspectratio'] = $options['aspectratio'];
                 } else {
@@ -463,6 +463,7 @@ class filter_jwplayer_media extends core_media_player {
             $playersetup->downloadbtn = $downloadbtn;
             // Pass the page context variables for logging
             $playersetup->logcontext = $PAGE->context->id;
+            $playersetup->logevents = $this->get_supported_events();
 
             // Set required class for player span tag.
             if (isset($options['htmlattributes']['class'])) {
@@ -482,12 +483,21 @@ class filter_jwplayer_media extends core_media_player {
     }
 
     /**
-     * Gets the list of file extensions supported by this media player.
+     * Gets the list of file extensions supported (enabled) by this media player.
      *
      * @return array Array of strings (extension not including dot e.g. 'mp3')
      */
     public function get_supported_extensions() {
         return explode(',', get_config('filter_jwplayer', 'enabledextensions'));
+    }
+
+    /**
+     * Gets the list of events supported (enabled) by this media player.
+     *
+     * @return array Array of strings
+     */
+    public function get_supported_events() {
+        return explode(',', get_config('filter_jwplayer', 'enabledevents'));
     }
 
     /**
@@ -515,6 +525,30 @@ class filter_jwplayer_media extends core_media_player {
         $audio = array('aac', 'm4a', 'f4a', 'mp3', 'ogg', 'oga');
         $streaming = array('m3u8', 'smil', 'mpd');
         return array_merge($video, $audio, $streaming);
+    }
+
+    /**
+     * Generates the list of supported events that can be logged.
+     *
+     * @return array Array of strings
+     */
+    public function list_supported_events() {
+        $events = array(
+            'playAttempt',
+            'play',
+            'buffer',
+            'pause',
+            'idle',
+            'complete',
+            'error',
+            'setupError',
+            'seek',
+            'visualQuality',
+            'levelsChanged',
+            'audioTrackChanged',
+            'captionsChanged',
+        );
+        return $events;
     }
 
     /**

@@ -34,6 +34,8 @@ $string['displaystyle'] = 'Display Style';
 $string['displaystyledesc'] = 'Default display style to use for videos if no video width specified.';
 $string['displayfixed'] = 'Fixed Width';
 $string['displayresponsive'] = 'Responsive';
+$string['enabledevents'] = 'Events logging';
+$string['enabledeventsdesc'] = 'Selected events will traced and recorded in activity logs (viewable in Reports section of the course). Make sure you select only required ones, as selecting more will increase logged data size. By default we trace only "play" and "pause" button clicks and that video has been viewed in full ("complete" event). For the details on events please refer to <a href="http://support.jwplayer.com/customer/portal/articles/1413089-javascript-api-reference">JW Player</a> website.';
 $string['enabledextensions'] = 'Enabled extensions';
 $string['enabledextensionsdesc'] = 'Only selected file extensions will be handled by the filter. Note HLS (.m3u8) and MPEG-Dash (.mpd) require a Premium, Enterprise or Ads licence for the player.';
 $string['errornojwplayerinstalled'] = 'No JW Player files found in Moodle';

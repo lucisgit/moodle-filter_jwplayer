@@ -62,6 +62,14 @@ if ($ADMIN->fulltree) {
             get_string('supportrtmpdesc', 'filter_jwplayer'),
             0));
 
+    // Enabled events to log.
+    $supportedevents = $jwplayer->list_supported_events();
+    $supportedeventsmenu = array_combine($supportedevents, $supportedevents);
+    $settings->add(new admin_setting_configmultiselect('filter_jwplayer/enabledevents',
+            get_string('enabledevents', 'filter_jwplayer'),
+            get_string('enabledeventsdesc', 'filter_jwplayer'),
+            array('play', 'pause', 'complete'), $supportedeventsmenu));
+
     // Appearance related settings.
     $settings->add(new admin_setting_heading('appearanceconfig',
             get_string('appearanceconfig', 'filter_jwplayer'), ''));
