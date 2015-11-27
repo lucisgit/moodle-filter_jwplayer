@@ -56,7 +56,7 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
 
         if (event.type == "play") {
             // For play events wait a short time before setting position so it picks up new position after seeks.
-            setTimeout(function(){config.data.position = playerinstance.getPosition()}, 10);
+            setTimeout(function(){config.data.position = playerinstance.getPosition();}, 10);
         }
 
         if (event.type == "levelsChanged") {
@@ -74,7 +74,7 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
 
         //log.debug(config.data);
         Y.io(mdlconfig.wwwroot + '/filter/jwplayer/eventlogger.php', config);
-    }
+    };
 
     /**
      * Error logging. Called when player error event is triggered.
@@ -86,7 +86,7 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
     var logerror = function(event) {
         var errormsg = this.getPlaylistItem().title + ' ' + event.type + ': '+ event.message;
         log.error(errormsg);
-    }
+    };
 
     return {
         /**
