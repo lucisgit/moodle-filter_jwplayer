@@ -116,7 +116,7 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
             playerinstance.setup(playersetup.setupdata);
 
             // Add download button if required.
-            if (playersetup.downloadbtn != undefined) {
+            if (typeof(playersetup.downloadbtn) !== 'undefined') {
                 playerinstance.addButton(playersetup.downloadbtn.img, playersetup.downloadbtn.tttext, function() {
                     // Grab the file that's currently playing.
                     window.location.href = playerinstance.getPlaylistItem().file + '?forcedownload=true';

@@ -429,14 +429,6 @@ class filter_jwplayer_media extends core_media_player {
                 $playersetupdata['skin'] = $skin;
             }
 
-            $downloadbtn = null;
-            if (get_config('filter_jwplayer', 'downloadbutton') && !count($streams)) {
-                $downloadbtn = array(
-                    'img' => $CFG->wwwroot.'/filter/jwplayer/img/download.png',
-                    'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer'),
-                );
-            }
-
             // Set Google Analytics settings if enabled.
             if (get_config('filter_jwplayer', 'googleanalytics')) {
                 if (isset($options['gaidstring'])) {
@@ -460,7 +452,15 @@ class filter_jwplayer_media extends core_media_player {
             $playersetup = new stdClass();
             $playersetup->playerid = $playerid;
             $playersetup->setupdata = $playersetupdata;
-            $playersetup->downloadbtn = $downloadbtn;
+
+            // Add download button if required and supported.
+            if (get_config('filter_jwplayer', 'downloadbutton') && !count($streams)) {
+                $playersetup->downloadbtn = array(
+                    'img' => $CFG->wwwroot.'/filter/jwplayer/img/download.png',
+                    'tttext' => get_string('videodownloadbtntttext', 'filter_jwplayer'),
+                );
+            }
+
             // Pass the page context variables for logging
             $playersetup->logcontext = $PAGE->context->id;
             $playersetup->logevents = $this->get_supported_events();
