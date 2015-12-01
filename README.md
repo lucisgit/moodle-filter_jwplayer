@@ -1,12 +1,15 @@
 moodle-filter_jwplayer
 ======================
 
-This is Moodle filter that allows using JW Player version 6 for playing
-HTML5 and flash content. The filter is designed to achieve consistency of
-the player appearance in all major browsers and mobile platforms. The
-player supports flash fallback, providing more devices and formats coverage
-than either HTML5 or flash can handle alone. The filter also supports RTMP
-and HLS streams.
+This a filter plugin that allows using JW Player 6 for playing HTML5 and
+Flash content in Moodle 2.6 and higher<sup>1</sup>. The filter is designed
+to achieve consistency of the player appearance in all major browsers and
+mobile platforms. The player supports Flash fallback, which provides more
+devices and formats coverage than either HTML5 or Flash can handle alone.
+The filter also supports RTMP and HLS streaming<sup>2</sup>.
+
+<sub><sup>1</sup> See plugin release notes for the list of supported Moodle versions.</sub>
+<sub><sup>2</sup> HLS support require paid license.</sub>
 
 Installation
 ------------
@@ -52,12 +55,17 @@ filter on Manage Filters  page in Site Administration area and move it above
 Usage
 -----
 
-Any multimedia content added to moodle using the HTML editor, either using
-the link or via media embedding dialog, will be played using JW Player if
-the format is supported and enabled in the config. For more details on
-supported formats see [this
-page](http://www.longtailvideo.com/support/jw-player/28836/media-format-support)
-(ignore YouTube section) on JW Player website.
+Any multimedia content added to Moodle through HTML editor, either using
+the URL or media embedding dialog, will be rendered and played using JW
+Player if the format is supported and enabled in the filter configuration.
+For more details on supported formats see [Media Format
+Reference](http://support.jwplayer.com/customer/en/portal/articles/1403635-media-format-reference)
+on JW Player website (ignore YouTube and RSS sections as they are not
+supported by plugin).
+
+Embedding multimedia content using File resource will not render using JW
+Player filter due to the current Moodle limitations
+([MDL-47495](https://tracker.moodle.org/browse/MDL-47495)).
 
 Note for developers
 -------------------
