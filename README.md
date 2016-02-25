@@ -1,6 +1,8 @@
 moodle-filter_jwplayer
 ======================
 
+[![Build Status](https://travis-ci.org/lucisgit/moodle-filter_jwplayer.svg?branch=JW6)](https://travis-ci.org/lucisgit/moodle-filter_jwplayer)
+
 This a filter plugin that allows using JW Player 6 for playing HTML5 and
 Flash content in Moodle 2.6 and higher<sup>1</sup>. The filter is designed
 to achieve consistency of the player appearance in all major browsers and
