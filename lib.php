@@ -129,8 +129,17 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
  * Setup filter requirements.
  *
  * @param moodle_page $page the page we are going to add requirements to.
+ * @return void
  */
 function filter_jwplayer_setup($page) {
+    // It is sufficient to load jwplayer library just once.
+    static $runonce;
+    if (!isset($runonce)) {
+        $runonce = true;
+    } else {
+        return;
+    }
+
     $hostingmethod = get_config('filter_jwplayer', 'hostingmethod');
     if ($hostingmethod === 'cloud') {
         // Well, this is not really a "cloud" version any more, we are just
