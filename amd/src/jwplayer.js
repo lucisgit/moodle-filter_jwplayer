@@ -22,7 +22,7 @@
  * @copyright  2015 Ruslan Kabalin, Lancaster University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, mdlconfig, Y, log) {
+define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(jwplayer, $, mdlconfig, Y, log) {
     // Private functions and variables.
     /** @var {int} logcontext Moodle page context id. */
     var logcontext = null;
@@ -108,10 +108,14 @@ define(['jwplayer', 'core/config', 'core/yui', 'core/log'], function(jwplayer, m
          *
          * @method init
          * @param {Object[]} playersetup JW Player setup parameters.
+         * @return {void}
          */
         setupPlayer: function (playersetup) {
             //log.debug(playersetup);
             logcontext = playersetup.logcontext;
+            if (!$('#'+playersetup.playerid).length) {
+                return;
+            }
             var playerinstance = jwplayer(playersetup.playerid);
             playerinstance.setup(playersetup.setupdata);
 
