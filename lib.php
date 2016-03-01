@@ -26,13 +26,14 @@
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/medialib.php');
 
-/** Current version of cloud-hosted JW Player. */
+// Current version of cloud-hosted JW Player.
 if (!defined('FILTER_JWPLAYER_CLOUD_VERSION')) {
     // This is the only place where version needs to be changed in case of new
     // release avialability.
     define('FILTER_JWPLAYER_CLOUD_VERSION', '7.2.2');
 }
-/** Size and aspect ratio related defaults. */
+
+// Size and aspect ratio related defaults.
 if (!defined('FILTER_JWPLAYER_VIDEO_WIDTH')) {
     // Default video width if no width is specified.
     // May be defined in config.php if required.
@@ -264,36 +265,57 @@ class filter_jwplayer_media extends core_media_player {
             // Process data-jwplayer attributes.
             if (!empty($options['htmlattributes'])) {
                 foreach ($options['htmlattributes'] as $attrib => $atval) {
-                    if (strpos($attrib, 'data-jwplayer-') === 0) {  // treat attributes starting data-jwplayer as options.
+                    if (strpos($attrib, 'data-jwplayer-') === 0) {
+                        // Treat attributes starting data-jwplayer as options.
                         $opt = preg_replace('~^data-jwplayer-~', '', $attrib);
                         $atval = trim((string) $atval);
-                        if (strpos($atval, ': ') || strpos($atval, '; ') || strpos($atval,', ')) {  // if attribute contains any of :;, it needs to be split to an array.
+                        if (strpos($atval, ': ') || strpos($atval, '; ') || strpos($atval, ', ')) {
+                            // If attribute contains any of :;, it needs to be split to an array.
                             $atvalarray = preg_split('~[,;] ~', $atval);
                             $newatval = array();
                             foreach ($atvalarray as $dataval) {
-                                $newdata = explode(': ', $dataval,2);
-                                if (count($newdata) > 1){
+                                $newdata = explode(': ', $dataval, 2);
+                                if (count($newdata) > 1) {
                                     $newdata[1] = trim($newdata[1]);
-                                    if (filter_var($newdata[1], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                                    if (filter_var($newdata[1], FILTER_VALIDATE_URL)) {
+                                        // If value is a URL convert to moodle_url.
                                         $newdata[1] = new moodle_url($newdata[1]);
                                     }
                                     $newatval[trim($newdata[0])] = $newdata[1];
                                 } else {
                                     $newdata[0] = trim($newdata[0]);
-                                    if (filter_var($newdata[0], FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                                    if (filter_var($newdata[0], FILTER_VALIDATE_URL)) {
+                                        // If value is a URL convert to moodle_url.
                                         $newdata[0] = new moodle_url($newdata[0]);
                                     }
                                     $newatval[] = $newdata[0];
                                 }
                             }
                             $atval = $newatval;
-                        } else if (filter_var($atval, FILTER_VALIDATE_URL)) { // if value is a URL convert to moodle_url.
+                        } else if (filter_var($atval, FILTER_VALIDATE_URL)) {
+                            // If value is a URL convert to moodle_url.
                             $atval = new moodle_url($atval);
                         }
                         $options[$opt] = $atval;
                     } else {
                         // Pass any other global HTML attributes to the player span tag.
-                        $globalhtmlattributes = array('accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate');
+                        $globalhtmlattributes = array(
+                            'accesskey',
+                            'class',
+                            'contenteditable',
+                            'contextmenu',
+                            'dir',
+                            'draggable',
+                            'dropzone',
+                            'hidden',
+                            'id',
+                            'lang',
+                            'spellcheck',
+                            'style',
+                            'tabindex',
+                            'title',
+                            'translate'
+                        );
                         if (in_array($attrib, $globalhtmlattributes) || strpos($attrib, 'data-' === 0)) {
                             $newattributes[$attrib] = $atval;
                         }
@@ -377,7 +399,7 @@ class filter_jwplayer_media extends core_media_player {
 
             // If width is a percentage surrounding span needs to have its width set so it does not default to 0px.
             $outerspanargs = array('class' => 'filter_jwplayer_playerblock');
-            if(!is_numeric($width)) {
+            if (!is_numeric($width)) {
                 $outerspanargs['style'] = 'width: '.$width.';';
                 $width = '100%';  // As the outer span in now at the required width, we set the width of the player to 100%.
             }
@@ -399,14 +421,14 @@ class filter_jwplayer_media extends core_media_player {
                     $playersetupdata['height'] = round($width * FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H / FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W);
                 } else if (isset($options['aspectratio'])) {
                     // Responsive videos need aspect ratio set to automatically set height, if this is set in $options use that.
-                        $playersetupdata['aspectratio'] = $options['aspectratio'];
+                    $playersetupdata['aspectratio'] = $options['aspectratio'];
                 } else {
-                    //  Use default aspectration
+                    // Use default aspectration.
                     $playersetupdata['aspectratio'] = FILTER_JWPLAYER_VIDEO_ASPECTRATIO_W.":".FILTER_JWPLAYER_VIDEO_ASPECTRATIO_H;
                 }
             }
 
-            //  Set additional player options: autostart, mute, controls, repeat, hlslabels, androidhls, primary.
+            // Set additional player options: autostart, mute, controls, repeat, hlslabels, androidhls, primary.
             if (isset($options['autostart'])) {
                 $playersetupdata['autostart'] = $options['autostart'];
             }
@@ -429,7 +451,6 @@ class filter_jwplayer_media extends core_media_player {
                 // if primary is set in $options then this will override all defaults including those for streams set above.
                 $playersetupdata['primary'] = $options['primary'];
             }
-
 
             // Load skin.
             if ($customskincss = get_config('filter_jwplayer', 'customskincss')) {

@@ -78,11 +78,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configstoredfile('filter_jwplayer/defaultposter',
             get_string('defaultposter', 'filter_jwplayer'),
             get_string('defaultposterdesc', 'filter_jwplayer'),
-            'defaultposter',
-            0,
-            array(
-                'accepted_types' => array('image')
-            )));
+            'defaultposter', 0, array('accepted_types' => array('image'))));
 
     // Download button.
     $settings->add(new admin_setting_configcheckbox('filter_jwplayer/downloadbutton',

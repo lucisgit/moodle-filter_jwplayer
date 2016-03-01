@@ -51,7 +51,7 @@ class filter_jwplayer extends moodle_text_filter {
      * @return the HTML content after the filtering has been applied.
      */
     public function filter($text, array $options = array()) {
-        global $CFG, $PAGE;
+        global $PAGE;
 
         if (!is_string($text) or empty($text)) {
             // Non string data can not be filtered anyway.
@@ -105,11 +105,14 @@ class filter_jwplayer extends moodle_text_filter {
         $options = array();
 
         // Get <a> tag attributes.
-        $escapedmatch = preg_replace('/&(?!(?:apos|quot|[gl]t|amp);|#)/','&amp;',$matches[0]); // Escape any unescaped & characters.
+        // Escape any unescaped & characters.
+        $escapedmatch = preg_replace('/&(?!(?:apos|quot|[gl]t|amp);|#)/', '&amp;', $matches[0]);
         $doc = new DOMDocument();
-        $doc->strictErrorChecking = FALSE;
-        $doc->loadHTML($escapedmatch);  // Load HTML as a DOMDocument.
-        if ($atag = simplexml_import_dom($doc)->body[0]->a[0]){  // Make sure xml is valid xml if not do nothing.
+        $doc->strictErrorChecking = false;
+        // Load HTML as a DOMDocument.
+        $doc->loadHTML($escapedmatch);
+        if ($atag = simplexml_import_dom($doc)->body[0]->a[0]) {
+            // Make sure xml is valid xml if not do nothing.
             $options['htmlattributes'] = $atag->attributes();
         }
 

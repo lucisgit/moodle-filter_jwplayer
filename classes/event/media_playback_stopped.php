@@ -54,7 +54,7 @@ class media_playback_stopped extends \core\event\base {
         }
         if ($this->other['reason'] == 'buffer') {
             $logstring .= " due to buffering";
-        } else if($this->other['reason'] == 'pause') {
+        } else if ($this->other['reason'] == 'pause') {
             $logstring .= " due to user clicking pause";
         }
 

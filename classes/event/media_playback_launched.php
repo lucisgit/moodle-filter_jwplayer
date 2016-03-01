@@ -52,7 +52,6 @@ class media_playback_launched extends \core\event\base {
             $logstring .= $this->other['file'];
         }
 
-
         $logstring .= " in the context {$this->contextlevel} with instance id {$this->contextinstanceid}.";
         return $logstring;
     }

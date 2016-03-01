@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(jwplayer, $, mdlconfig, Y, log) {
+
     // Private functions and variables.
     /** @var {int} logcontext Moodle page context id. */
     var logcontext = null;
@@ -50,7 +51,7 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(j
             on: {
                 failure: function(o) {
                     log.error(o);
-		}
+                }
             }
         };
 
@@ -72,7 +73,7 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(j
             config.data.captions = JSON.stringify(playerinstance.getCaptionsList());
         }
 
-        //log.debug(config.data);
+        // log.debug(config.data);
         Y.io(mdlconfig.wwwroot + '/filter/jwplayer/eventlogger.php', config);
     };
 
@@ -84,7 +85,7 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(j
      * @param {Object[]} event JW Player event.
      */
     var logerror = function(event) {
-        var errormsg = this.getPlaylistItem().title + ' ' + event.type + ': '+ event.message;
+        var errormsg = this.getPlaylistItem().title + ' ' + event.type + ': ' + event.message;
         log.error(errormsg);
     };
 
@@ -111,9 +112,9 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(j
          * @return {void}
          */
         setupPlayer: function (playersetup) {
-            //log.debug(playersetup);
+            // log.debug(playersetup);
             logcontext = playersetup.logcontext;
-            if (!$('#'+playersetup.playerid).length) {
+            if (!$('#' + playersetup.playerid).length) {
                 return;
             }
             var playerinstance = jwplayer(playersetup.playerid);
