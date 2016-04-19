@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015112500;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2016041900;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2015051100;        // Requires Moodle 2.9
 $plugin->component = 'filter_jwplayer'; // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release   = '7-0.4 for Moodle 2.9+, JW7 CDN 7.2.2)';
+$plugin->release   = '7-0.5 for Moodle 2.9+, JW7 CDN 7.3.6)';
