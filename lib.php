@@ -133,6 +133,8 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
  * @return void
  */
 function filter_jwplayer_setup($page) {
+    global $CFG;
+
     // It is sufficient to load jwplayer library just once.
     static $runonce;
     if (!isset($runonce)) {
@@ -149,7 +151,7 @@ function filter_jwplayer_setup($page) {
     } else if ($hostingmethod === 'self') {
         // For self-hosted option, we are looking for player files presence in
         // ./lib/jwplayer/ directory.
-        $jwplayer = new moodle_url('/lib/jwplayer/jwplayer');
+        $jwplayer = new moodle_url($CFG->httpswwwroot.'/lib/jwplayer/jwplayer');
     }
     // We need to define jwplayer, since jwplayer doesn't
     // define a module for require.js.
