@@ -124,7 +124,7 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(j
             if (typeof(playersetup.downloadbtn) !== 'undefined') {
                 playerinstance.addButton(playersetup.downloadbtn.img, playersetup.downloadbtn.tttext, function() {
                     // Grab the file that's currently playing.
-                    window.location.href = playerinstance.getPlaylistItem().file + '?forcedownload=true';
+                    window.open(playerinstance.getPlaylistItem().file + '?forcedownload=true');
                 }, "download");
             }
 
