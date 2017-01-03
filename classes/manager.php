@@ -43,7 +43,9 @@ class filter_jwplayer_manager extends core_media_manager {
     }
 
     protected function get_players() {
-        $this->players[] = new filter_jwplayer_media();
+        $players = parent::get_players();
+        array_unshift($players, new filter_jwplayer_media());
+        $this->players = $players;
         return $this->players;
     }
 }
