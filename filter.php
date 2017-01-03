@@ -38,11 +38,6 @@ require_once($CFG->dirroot.'/filter/jwplayer/lib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class filter_jwplayer extends moodle_text_filter {
-    /** @var filter_jwplayer Media renderer */
-    protected $renderer;
-    /** @var string Partial regex pattern indicating possible embeddable content */
-    protected $embedmarkers;
-
     /**
      * Implement the filtering.
      *
@@ -63,16 +58,14 @@ class filter_jwplayer extends moodle_text_filter {
             return $text;
         }
 
-        if (!$this->renderer) {
-            $this->renderer = $PAGE->get_renderer('filter_jwplayer');
-            $this->embedmarkers = $this->renderer->get_embeddable_markers();
-        }
+        // Determine the list of markers using custom media manager class.
+        $embedmarkers = filter_jwplayer_manager::instance()->get_embeddable_markers();
 
         // Handle all links that contain any 'embeddable' marker text (it could
         // do all links, but the embeddable markers thing should make it faster
         // by meaning for most links it doesn't drop into PHP code).
         $newtext = preg_replace_callback($re = '~<a\s[^>]*href="([^"]*(?:' .
-                $this->embedmarkers . ')[^"]*)"[^>]*>([^>]*)</a>~is',
+                $embedmarkers . ')[^"]*)"[^>]*>([^>]*)</a>~is',
                 array($this, 'callback'), $text);
 
         if (empty($newtext) or $newtext === $text) {
@@ -118,7 +111,7 @@ class filter_jwplayer extends moodle_text_filter {
 
         // Split provided URL into alternatives.
         $urls = filter_jwplayer_split_alternatives($matches[1], $width, $height);
-        $result = $this->renderer->embed_alternatives($urls, $name, $width, $height, $options);
+        $result = filter_jwplayer_manager::instance()->embed_alternatives($urls, $name, $width, $height, $options);
 
         // If something was embedded, return it, otherwise return original.
         if ($result !== '') {
@@ -135,6 +128,9 @@ class filter_jwplayer extends moodle_text_filter {
      * @param context $context the context which contents are going to be filtered.
      */
     public function setup($page, $context) {
+        // Make sure we clear media manager cache before using this filter.
+        filter_jwplayer_manager::reset_caches();
+        // And setup the player.
         filter_jwplayer_setup($page);
     }
 }

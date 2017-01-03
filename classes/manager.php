@@ -15,23 +15,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *  JW Player media filtering renderer.
+ *  JW Player media filter manager.
  *
- * @package    filter
- * @subpackage jwplayer
- * @copyright  2014 Ruslan Kabalin, Lancaster University
+ * @package    filter_jwplayer
+ * @copyright  2017 Ruslan Kabalin, Lancaster University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot.'/filter/jwplayer/lib.php');
+require_once($CFG->dirroot.'/filter/jwplayer/classes/player.php');
 
-class filter_jwplayer_renderer extends core_media_renderer {
-    protected function get_players_raw() {
-        return array(
-            'jwplayer' => new filter_jwplayer_media(),
-        );
+/**
+ * We have to override manager for media files to use it in the filter.
+ *
+ * @package    filter_jwplayer
+ * @copyright  2017 Ruslan Kabalin, Lancaster University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+class filter_jwplayer_manager extends core_media_manager {
+
+    public static function instance() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
-
+    protected function get_players() {
+        $this->players[] = new filter_jwplayer_media();
+        return $this->players;
+    }
 }
