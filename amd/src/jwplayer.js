@@ -22,7 +22,7 @@
  * @copyright  2015 Ruslan Kabalin, Lancaster University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(jwplayer, $, mdlconfig, Y, log) {
+define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log', 'module'], function(jwplayer, $, mdlconfig, Y, log, module) {
 
     // Private functions and variables.
     /** @var {int} logcontext Moodle page context id. */
@@ -91,20 +91,6 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(j
 
     return {
         /**
-         * Initialise a player.
-         *
-         * @method init
-         * @param {string} licensekey JW Player license key.
-         */
-        init: function (licensekey) {
-            // Unfortinalely other loaded parts of JW player assume that jwplayer
-            // lives in window.jwplayer, so we need this hack.
-            window.jwplayer = window.jwplayer || jwplayer;
-            if (licensekey) {
-                window.jwplayer.key = licensekey;
-            }
-        },
-        /**
          * Setup player instance.
          *
          * @method init
@@ -112,7 +98,13 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log'], function(j
          * @return {void}
          */
         setupPlayer: function (playersetup) {
-            // log.debug(playersetup);
+            // Unfortunately other loaded parts of JW player assume that jwplayer
+            // lives in window.jwplayer, so we need this hack.
+            window.jwplayer = window.jwplayer || jwplayer;
+            if (module.config().licensekey) {
+                window.jwplayer.key = module.config().licensekey;
+            }
+            
             logcontext = playersetup.logcontext;
             if (!$('#' + playersetup.playerid).length) {
                 return;

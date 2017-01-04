@@ -133,6 +133,8 @@ function filter_jwplayer_split_alternatives($combinedurl, &$width, &$height) {
  * @return void
  */
 function filter_jwplayer_setup($page) {
+    global $CFG;
+
     // It is sufficient to load jwplayer library just once.
     static $runonce;
     if (!isset($runonce)) {
@@ -149,16 +151,17 @@ function filter_jwplayer_setup($page) {
     } else if ($hostingmethod === 'self') {
         // For self-hosted option, we are looking for player files presence in
         // ./lib/jwplayer/ directory.
-        $jwplayer = new moodle_url('/lib/jwplayer/jwplayer');
+        $jwplayer = new moodle_url($CFG->httpswwwroot.'/lib/jwplayer/jwplayer');
     }
     // We need to define jwplayer, since jwplayer doesn't
     // define a module for require.js.
     $requirejs = 'require.config({ paths: {\'jwplayer\': \'' . $jwplayer->out() . '\'}})';
     $page->requires->js_amd_inline($requirejs);
 
-    // Init player with the license key.
+    // Set player license key.
     $licensekey = get_config('filter_jwplayer', 'licensekey');
-    $page->requires->js_call_amd('filter_jwplayer/jwplayer', 'init', array($licensekey));
+    $licensejs = 'require.config({ config: {\'filter_jwplayer/jwplayer\': { licensekey: \'' . $licensekey . '\'}}})';
+    $page->requires->js_amd_inline($licensejs);
 }
 
 function filter_jwplayer_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
