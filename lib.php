@@ -156,9 +156,10 @@ function filter_jwplayer_setup($page) {
     $requirejs = 'require.config({ paths: {\'jwplayer\': \'' . $jwplayer->out() . '\'}})';
     $page->requires->js_amd_inline($requirejs);
 
-    // Init player with the license key.
+    // Set player license key.
     $licensekey = get_config('filter_jwplayer', 'licensekey');
-    $page->requires->js_call_amd('filter_jwplayer/jwplayer', 'init', array($licensekey));
+    $licensejs = 'require.config({ config: {\'filter_jwplayer/jwplayer\': { licensekey: \'' . $licensekey . '\'}}})';
+    $page->requires->js_amd_inline($licensejs);
 }
 
 function filter_jwplayer_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
