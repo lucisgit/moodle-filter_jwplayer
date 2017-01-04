@@ -104,7 +104,7 @@ define(['jwplayer', 'jquery', 'core/config', 'core/yui', 'core/log', 'module'], 
             if (module.config().licensekey) {
                 window.jwplayer.key = module.config().licensekey;
             }
-            
+
             logcontext = playersetup.logcontext;
             if (!$('#' + playersetup.playerid).length) {
                 return;
