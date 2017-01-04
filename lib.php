@@ -30,7 +30,7 @@ require_once($CFG->libdir . '/medialib.php');
 if (!defined('FILTER_JWPLAYER_CLOUD_VERSION')) {
     // This is the only place where version needs to be changed in case of new
     // release avialability.
-    define('FILTER_JWPLAYER_CLOUD_VERSION', '7.3.6');
+    define('FILTER_JWPLAYER_CLOUD_VERSION', '7.8.6');
 }
 
 // Size and aspect ratio related defaults.
