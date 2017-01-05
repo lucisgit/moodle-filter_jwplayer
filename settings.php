@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 if ($ADMIN->fulltree) {
     require_once(__DIR__ . '/lib.php');
     require_once(__DIR__ . '/adminlib.php');
+    require_once(__DIR__ . '/classes/player.php');
     $jwplayer = new filter_jwplayer_media();
 
     // Hosting method.
