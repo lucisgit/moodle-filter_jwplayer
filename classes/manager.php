@@ -35,9 +35,14 @@ require_once($CFG->dirroot.'/filter/jwplayer/classes/player.php');
 
 class filter_jwplayer_manager extends core_media_manager {
 
-    public static function instance() {
-        if (self::$instance === null) {
-            self::$instance = new self();
+    public static function instance($page = null) {
+        // Use the passed $page if given, otherwise the $PAGE global.
+        if (!$page) {
+            global $PAGE;
+            $page = $PAGE;
+        }
+        if (self::$instance === null || ($page && self::$instance->page !== $page)) {
+            self::$instance = new self($page);
         }
         return self::$instance;
     }
