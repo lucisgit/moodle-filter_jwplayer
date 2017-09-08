@@ -1,7 +1,8 @@
 moodle-filter_jwplayer
 ======================
 
-[![Build Status](https://travis-ci.org/lucisgit/moodle-filter_jwplayer.svg?branch=JW7)](https://travis-ci.org/lucisgit/moodle-filter_jwplayer)
+**This plugin works with Moodle versions up to 3.1. If you are using Moodle
+3.2+, please install [JW Player Media Plugin](https://github.com/lucisgit/moodle-media_jwplayer) instead.**
 
 This a filter plugin that allows using JW Player 7 for playing HTML5 and
 Flash content in Moodle 2.9 and higher<sup>1</sup>. The filter is designed
